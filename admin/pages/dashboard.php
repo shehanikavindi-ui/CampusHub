@@ -1,34 +1,134 @@
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th,
+    td {
+        vertical-align: middle;
+        padding: 12px 10px;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .data-table th:nth-child(1),
+    .data-table td:nth-child(1) {
+        width: 45%;
+    }
+
+    .data-table th:nth-child(2),
+    .data-table td:nth-child(2) {
+        width: 15%;
+    }
+
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3) {
+        width: 20%;
+    }
+
+    .data-table th:nth-child(4),
+    .data-table td:nth-child(4) {
+        width: 20%;
+    }
+
+    .data-table th,
+    .data-table td {
+        vertical-align: middle;
+        padding: 12px 10px;
+        overflow: hidden;
+        text-align: center;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .leftAligned {
+        text-align: left;
+    }
+
+    #status-upcoming {
+        align-items: center;
+        font-size: 11.5px;
+        padding: 5px 8px;
+        border-radius: var(--radius-full);
+        font-weight: 500;
+        background: var(--teal-50);
+        color: var(--teal-700);
+        border: 1px solid var(--teal-500);
+    }
+
+    #status-cancelled {
+        align-items: center;
+        font-size: 11.5px;
+        padding: 5px 8px;
+        border-radius: var(--radius-full);
+        font-weight: 500;
+        background: #FEF2F2;
+        color: #991B1B;
+        border: 1px solid #991B1B;
+    }
+
+    #status-completed {
+        align-items: center;
+        font-size: 11.5px;
+        padding: 5px 8px;
+        border-radius: var(--radius-full);
+        font-weight: 500;
+        background: var(--violet-50);
+        color: var(--violet-700);
+        border: 1px solid var(--violet-500);
+    }
+</style>
+
 <div class="stats-grid">
+
+    <?php
+    $students_rs = Database::search("SELECT COUNT(*) AS cnt FROM student");
+    $students = $students_rs->fetch_assoc()['cnt'];
+
+    $events_rs = Database::search("SELECT COUNT(*) AS cnt FROM event");
+    $events = $events_rs->fetch_assoc()['cnt'];
+
+    $registrations_rs = Database::search("SELECT COUNT(*) AS cnt FROM registration");
+    $registrations = $registrations_rs->fetch_assoc()['cnt'];
+
+    $announcements_rs = Database::search("SELECT COUNT(*) AS cnt FROM announcements");
+    $announcements = $announcements_rs->fetch_assoc()['cnt'];
+    ?>
 
     <div class="stat-card">
         <div class="stat-icon icon-teal"><i class="ti ti-users"></i></div>
         <div class="stat-label">Total Students</div>
-        <div class="stat-value">1,284</div>
-        <span class="stat-badge badge-up"><i class="ti ti-trending-up" style="font-size:12px"></i>
-            +12%</span>
+        <div class="stat-value">
+            <?= $students ?>
+        </div>
     </div>
 
     <div class="stat-card">
         <div class="stat-icon icon-violet"><i class="ti ti-calendar-event"></i></div>
         <div class="stat-label">Active Events</div>
-        <div class="stat-value">34</div>
-        <span class="stat-badge badge-up"><i class="ti ti-trending-up" style="font-size:12px"></i> +5</span>
+        <div class="stat-value">
+            <?= $events ?>
+        </div>
     </div>
 
     <div class="stat-card">
         <div class="stat-icon icon-amber"><i class="ti ti-clipboard-check"></i></div>
         <div class="stat-label">Registrations</div>
-        <div class="stat-value">892</div>
-        <span class="stat-badge badge-up"><i class="ti ti-trending-up" style="font-size:12px"></i>
-            +8%</span>
+        <div class="stat-value">
+            <?= $registrations ?>
+        </div>
     </div>
 
     <div class="stat-card">
-        <div class="stat-icon icon-blue"><i class="ti ti-photo"></i></div>
-        <div class="stat-label">Media Files</div>
-        <div class="stat-value">3.6k</div>
-        <span class="stat-badge badge-down"><i class="ti ti-trending-down" style="font-size:12px"></i>
-            -2%</span>
+        <div class="stat-icon icon-blue"><i class="ti ti-speakerphone"></i></div>
+        <div class="stat-label">Announcements</div>
+        <div class="stat-value">
+            <?= $announcements ?>
+        </div>
     </div>
 
 </div>
@@ -46,42 +146,53 @@
             <thead>
                 <tr>
                     <th>Event</th>
+                    <th>Location</th>
                     <th>Date</th>
                     <th>Registrations</th>
                     <th>Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td style="color:var(--neutral-800); font-weight:500;">Orientation Day 2025</td>
-                    <td>Jun 22</td>
-                    <td>145</td>
-                    <td><span class="pill pill-green">Open</span></td>
-                </tr>
-                <tr>
-                    <td style="color:var(--neutral-800); font-weight:500;">Coding Hackathon</td>
-                    <td>Jun 28</td>
-                    <td>88</td>
-                    <td><span class="pill pill-green">Open</span></td>
-                </tr>
-                <tr>
-                    <td style="color:var(--neutral-800); font-weight:500;">Sports Carnival</td>
-                    <td>Jul 5</td>
-                    <td>210</td>
-                    <td><span class="pill pill-amber">Filling</span></td>
-                </tr>
-                <tr>
-                    <td style="color:var(--neutral-800); font-weight:500;">Art Workshop</td>
-                    <td>Jul 12</td>
-                    <td>40</td>
-                    <td><span class="pill pill-green">Open</span></td>
-                </tr>
-                <tr>
-                    <td style="color:var(--neutral-800); font-weight:500;">Leadership Summit</td>
-                    <td>Jul 19</td>
-                    <td>300</td>
-                    <td><span class="pill pill-red">Full</span></td>
-                </tr>
+                <?php
+                $q = "
+                        SELECT 
+                            e.*,
+                            s.name AS status,
+                            COUNT(r.id) AS registration_count
+                        FROM event e
+                        JOIN status s ON e.status = s.id
+                        LEFT JOIN registration r ON e.id = r.event_id
+                        WHERE e.date >= CURDATE()
+                        GROUP BY e.id
+                        ORDER BY e.date ASC
+                        LIMIT 10
+                    ";
+
+                $events_rs = Database::search($q);
+
+                while ($row = $events_rs->fetch_assoc()) {
+
+                    $title = $row["title"];
+                    $status = $row["status"];
+                    $date = $row["date"];
+                    $location = $row["location"];
+                    $count = $row["registration_count"];
+
+                    $statusClass = strtolower($status);
+
+                    echo "
+                            <tr>
+                                <td style='color:var(--neutral-800); font-weight:500; text-align: left;'>$title</td>
+                                <td style='text-align: left;'>$location</td>
+                                <td>$date</td>
+                                <td>$count</td>
+                                <td>
+                                <span id='status-$statusClass'>$status</span>
+                                </td>
+                            </tr>
+                        ";
+                }
+                ?>
             </tbody>
         </table>
     </div>

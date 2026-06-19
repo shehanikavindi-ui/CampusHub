@@ -385,12 +385,12 @@
     }
 
     .evt-status.Completed {
-        background: #FFFBEB;
-        color: #92400E;
+        background: var(--violet-50);
+        color: var(--violet-700);
     }
 
     .evt-status.Completed::before {
-        background: #D97706;
+        background: var(--violet-500);
     }
 
     .evt-status.Cancelled {
