@@ -1,6 +1,4 @@
-
 <style>
-
     .events-page {
         display: flex;
         flex-direction: column;
@@ -377,30 +375,30 @@
         border-radius: 50%;
     }
 
-    .evt-status.open {
+    .evt-status.Upcoming {
         background: var(--teal-50);
         color: var(--teal-700);
     }
 
-    .evt-status.open::before {
+    .evt-status.Upcoming::before {
         background: var(--teal-500);
     }
 
-    .evt-status.filling {
+    .evt-status.Completed {
         background: #FFFBEB;
         color: #92400E;
     }
 
-    .evt-status.filling::before {
+    .evt-status.Completed::before {
         background: #D97706;
     }
 
-    .evt-status.full {
+    .evt-status.Cancelled {
         background: #FEF2F2;
         color: #991B1B;
     }
 
-    .evt-status.full::before {
+    .evt-status.Cancelled::before {
         background: #DC2626;
     }
 
@@ -601,7 +599,6 @@
         align-items: center;
         padding: 18px 20px;
         border-bottom: 1px solid var(--neutral-100);
-        background: var(--bg-soft);
     }
 
     .modal-title h2 {
@@ -893,7 +890,6 @@
         gap: 10px;
         padding: 14px 20px;
         border-top: 1px solid var(--neutral-100);
-        background: var(--bg-soft);
     }
 
     .btn-ghost {
@@ -980,6 +976,46 @@
         align-items: center;
         gap: 6px;
         opacity: 0.9;
+    }
+
+    .am-modal-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: var(--radius-md);
+        background: var(--teal-50);
+        color: var(--teal-600);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .am-modal-head-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .am-modal-icon.edit-icon {
+        background: var(--teal-50);
+        color: var(--teal-600);
+    }
+
+    .am-modal-title {
+        font-size: var(--text-lg);
+        font-weight: 600;
+        color: var(--text-primary);
+    }
+
+    .am-modal-title span {
+        color: #0D9488;
+        font-weight: 700;
+    }
+
+    .am-modal-sub {
+        font-size: 11.5px;
+        color: var(--text-muted);
+        margin-top: 1px;
     }
 </style>
 
@@ -1071,7 +1107,7 @@
                     </div>
 
                     <div class="evt-card-footer">
-                        <span class="evt-status open"><?= $status ?></span>
+                        <span class="evt-status <?= $status ?>"><?= $status ?></span>
                         <span class="evt-reg-count"><b>
                                 <?= $regCount ?>
                             </b>&nbsp;registered</span>
@@ -1173,128 +1209,142 @@
     <div id="eventEditModal" class="modal-overlay" onclick="closeEditModal(event)">
         <div class="modal-card event-modal" onclick="event.stopPropagation()">
 
-            <div class="modal-header">
-                <div class="modal-title">
-                    <h2>Edit event: <span id="title"></span></h2>
-                </div>
-                <button class="modal-close" onclick="closeEditModal()" aria-label="Close">
-                    <i class="ti ti-x" aria-hidden="true"></i>
-                </button>
-            </div>
+            <form id="eventEditForm" onsubmit="updateEvent(event)">
 
-            <div class="modal-body">
-
-                <input type="hidden" id="edit_id">
-
-                <div class="field-grid">
-
-                    <div class="field field-full">
-                        <label>Title</label>
-                        <input id="edit_title" type="text" placeholder="e.g. Coding Hackathon">
-                    </div>
-
-                    <div class="field">
-                        <label>Date</label>
-                        <div class="icon-field">
-                            <i class="ti ti-calendar" aria-hidden="true"></i>
-                            <input id="edit_date" type="date">
+                <div class="modal-header">
+                    <div class="am-modal-head-left">
+                        <div class="am-modal-icon edit-icon"><i class="ti ti-edit"></i></div>
+                        <div>
+                            <div class="am-modal-title" id="amEditModalTitle">Edit Event: <span class="am-modal-title"
+                                    id="title"></span></div>
+                            <div class="am-modal-sub">Changes only save once you confirm below.</div>
                         </div>
                     </div>
-
-                    <div class="field">
-                        <label>Location</label>
-                        <div class="icon-field">
-                            <i class="ti ti-map-pin" aria-hidden="true"></i>
-                            <input id="edit_location" type="text" placeholder="e.g. Main Auditorium">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label>Start time</label>
-                        <div class="icon-field">
-                            <i class="ti ti-clock" aria-hidden="true"></i>
-                            <input id="edit_start" type="time">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label>End time</label>
-                        <div class="icon-field">
-                            <i class="ti ti-clock" aria-hidden="true"></i>
-                            <input id="edit_end" type="time">
-                        </div>
-                    </div>
-
-                    <div class="field">
-                        <label>Category</label>
-                        <select id="edit_category">
-                            <?php
-                            $q = "SELECT * FROM category";
-                            $categories_rs = Database::search($q);
-                            while ($row = $categories_rs->fetch_assoc()) {
-                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Institution</label>
-                        <select id="edit_institution">
-                            <?php
-                            $q = "SELECT * FROM institution";
-                            $institutes_rs = Database::search($q);
-                            while ($row = $institutes_rs->fetch_assoc()) {
-                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="field">
-                        <label>Status</label>
-                        <select id="edit_status">
-                            <?php
-                            $q = "SELECT * FROM status";
-                            $status_rs = Database::search($q);
-                            while ($row = $status_rs->fetch_assoc()) {
-                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-
-                    <div class="field field-full">
-                        <label>Banner image</label>
-                        <div class="upload-zone" id="uploadZone"
-                            onclick="document.getElementById('edit_image').click()">
-                            <div class="upload-preview" id="uploadPreview">
-                                <i class="ti ti-photo" aria-hidden="true"></i>
-                            </div>
-                            <div class="upload-text">
-                                <p id="uploadFileName">Choose a banner image</p>
-                                <span>JPG or PNG, recommended 1200&times;400px</span>
-                            </div>
-                            <input id="edit_image" type="file" accept="image/*" style="display:none"
-                                onchange="previewBannerImage(this)">
-                        </div>
-                    </div>
-
+                    <button type="button" class="modal-close" onclick="closeEditModal()" aria-label="Close">
+                        <i class="ti ti-x" aria-hidden="true"></i>
+                    </button>
                 </div>
 
-            </div>
+                <div class="modal-body">
 
-            <div class="err-box" id="edit_error">
-                <i class="ti ti-alert-circle" aria-hidden="true"></i>
-                <span id="edit_error_text"></span>
-            </div>
+                    <input type="hidden" id="edit_id" name="id" required>
 
-            <div class="modal-footer">
-                <button class="btn-ghost" onclick="closeEditModal()">Cancel</button>
-                <button class="evt-btn-primary" onclick="updateEvent()">
-                    Update event
-                </button>
-            </div>
+                    <div class="field-grid">
+
+                        <div class="field field-full">
+                            <label>Title</label>
+                            <input required id="edit_title" name="title" type="text"
+                                placeholder="e.g. Coding Hackathon">
+                        </div>
+
+                        <div class="field">
+                            <label>Date</label>
+                            <div class="icon-field">
+                                <i class="ti ti-calendar" aria-hidden="true"></i>
+                                <input required id="edit_date" name="date" type="date">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Location</label>
+                            <div class="icon-field">
+                                <i class="ti ti-map-pin" aria-hidden="true"></i>
+                                <input required id="edit_location" name="location" type="text"
+                                    placeholder="e.g. Main Auditorium">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Start time</label>
+                            <div class="icon-field">
+                                <i class="ti ti-clock" aria-hidden="true"></i>
+                                <input required id="edit_start" name="start_time" type="time">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>End time</label>
+                            <div class="icon-field">
+                                <i class="ti ti-clock" aria-hidden="true"></i>
+                                <input required id="edit_end" name="end_time" type="time">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Category</label>
+                            <select id="edit_category" name="category_id" required>
+                                <?php
+                                $q = "SELECT * FROM category";
+                                $categories_rs = Database::search($q);
+                                while ($row = $categories_rs->fetch_assoc()) {
+                                    echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Institution</label>
+                            <select id="edit_institution" name="institution_id" required>
+                                <?php
+                                $q = "SELECT * FROM institution";
+                                $institutes_rs = Database::search($q);
+                                while ($row = $institutes_rs->fetch_assoc()) {
+                                    echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Status</label>
+                            <select id="edit_status" name="status_id" required>
+                                <?php
+                                $q = "SELECT * FROM status";
+                                $status_rs = Database::search($q);
+                                while ($row = $status_rs->fetch_assoc()) {
+                                    echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="field field-full">
+                            <label>Banner image</label>
+                            <div class="upload-zone" id="uploadZone"
+                                onclick="document.getElementById('edit_image').click()">
+
+                                <div class="upload-preview" id="uploadPreview">
+                                    <i class="ti ti-photo" aria-hidden="true"></i>
+                                </div>
+
+                                <div class="upload-text">
+                                    <p id="uploadFileName">Choose a banner image</p>
+                                    <span>JPG or PNG, recommended 1200×400px</span>
+                                </div>
+
+                                <input id="edit_image" type="file" name="image" accept="image/*" style="display:none"
+                                    onchange="previewBannerImage(this)">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="err-box" id="edit_error">
+                    <i class="ti ti-alert-circle" aria-hidden="true"></i>
+                    <span id="edit_error_text"></span>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="evt-btn-primary">
+                        Update event
+                    </button>
+                </div>
+
+            </form>
 
         </div>
     </div>
@@ -1429,7 +1479,8 @@
             });
     }
 
-    function updateEvent() {
+    function updateEvent(e) {
+        e.preventDefault();
 
         const formData = new FormData();
 
@@ -1452,16 +1503,14 @@
         })
             .then(res => res.text())
             .then(res => {
-
                 if (res.trim() === "success") {
                     location.reload();
                 } else {
-                    document.getElementById("edit_error").textContent = res;
+                    showEditError(res); // better than innerText bug
                 }
-
             })
             .catch(err => {
-                document.getElementById("edit_error").textContent = "Update failed";
+                showEditError("Update failed");
                 console.error(err);
             });
     }

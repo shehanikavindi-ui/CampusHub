@@ -139,7 +139,7 @@
         border-radius: var(--radius-lg);
         border: 1px solid var(--neutral-200);
         box-shadow: var(--shadow-sm);
-        overflow: hidden;
+        overflow: visible !important;
     }
 
     .table-wrap {
@@ -149,6 +149,7 @@
     .students-table {
         width: 100%;
         border-collapse: collapse;
+        overflow: visible !important;
     }
 
     .students-table thead tr {
@@ -207,8 +208,8 @@
     }
 
     .av {
-        width: 34px;
-        height: 34px;
+        width: 40px;
+        height: 40px;
         border-radius: var(--radius-md);
         display: flex;
         align-items: center;
@@ -528,71 +529,11 @@
         background: var(--bg-soft);
     }
 
-    /* Keep your base styles but apply them to the trigger wrapper */
-    .custom-dropdown {
-        position: relative;
-        display: inline-block;
-        height: 30px;
-        line-height: 28px;
-        /* Vertically centers the text */
-        padding: 0 28px 0 10px;
-        border-radius: var(--radius-full);
-        border: 1px solid var(--neutral-200);
-        font-size: 12px;
-        font-family: var(--font-body);
-        cursor: pointer;
-        user-select: none;
-        background-repeat: no-repeat;
-        background-position: right 8px center;
-        background-size: 12px;
-    }
-
-    /* Toggle visibility of the menu */
-    .custom-dropdown.open .dropdown-options {
-        display: block;
-    }
-
-    /* The actual dropdown panel (NO black border here!) */
-    .dropdown-options {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        margin-top: 4px;
-        background-color: #ffffff;
-        border: 1px solid var(--neutral-200);
-        /* Custom clean border instead of black */
-        border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        z-index: 50;
-        overflow: hidden;
-    }
-
-    /* Individual options */
-    .dropdown-item {
-        padding: 6px 12px;
-        color: #1f2937;
-        background-color: #ffffff;
-    }
-
-    .dropdown-item:hover {
-        background-color: var(--neutral-100);
-    }
-
-    /* Maintain your existing active/inactive color variants */
-    .custom-dropdown.active {
-        background-color: var(--teal-50);
-        border-color: var(--teal-200);
-        color: var(--teal-700);
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2314B8A6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-    }
-
-    .custom-dropdown.inactive {
-        background-color: #FEE2E2;
-        border-color: #FECACA;
-        color: #B91C1C;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23B91C1C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    .av-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20%;
+        object-fit: cover;
     }
 </style>
 
@@ -606,13 +547,6 @@
                 <i class="ti ti-search" aria-hidden="true"></i>
                 <input type="text" id="studentSearch" placeholder="Search by name or ID..." oninput="filterStudents()">
             </div>
-
-            <select class="filter-select" id="statusFilter" onchange="filterStudents()">
-                <option value="">All statuses</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="Suspended">Suspended</option>
-            </select>
 
             <select class="filter-select" id="courseFilter" onchange="filterStudents()">
                 <option value="">All Institutes</option>
@@ -659,9 +593,6 @@
                         <th>Faculty</th>
                         <th>Year</th>
                         <th>Phone</th>
-                        <th class="sortable" onclick="sortTable('status')">
-                            Status <i class="ti ti-selector sort-icon" aria-hidden="true"></i>
-                        </th>
                         <th style="width:110px;">Actions</th>
                     </tr>
                 </thead>
@@ -818,7 +749,10 @@ while ($row = $student_rs->fetch_assoc()) {
         <tr>
             <td>
                 <div class="avatar-cell">
-                    <div class="av ${avColor(s.name)}">${initials(s.name)}</div>
+                    ${s.pfp
+                ? `<img class="av-img" src="../uploads/profiles/${s.pfp}" />`
+                : `<div class="av ${avColor(s.name)}">${initials(s.name)}</div>`
+            }
                     <div>
                         <div class="student-name">${s.name}</div>
                         <div class="student-id">${s.st_id}</div>
@@ -829,17 +763,6 @@ while ($row = $student_rs->fetch_assoc()) {
             <td>${s.faculty}</td>
             <td style="color:var(--neutral-500);">${s.year}</td>
             <td style="color:var(--neutral-500);">${s.mobile}</td>
-            <td style="color:var(--neutral-500);">
-                <div class="custom-dropdown status-select ${s.status.toLowerCase()}">
-                    <div class="dropdown-trigger" onclick="toggleDropdown(this)">
-                        ${s.status}
-                    </div>
-                    <div class="dropdown-options">
-                        <div class="dropdown-item" onclick="selectOption(this, 'Active', '${s.id}')">Active</div>
-                        <div class="dropdown-item" onclick="selectOption(this, 'Inactive', '${s.id}')">Inactive</div>
-                    </div>
-                </div>
-            </td>
             <td>
                 <div class="row-actions">
                     <a class="icon-btn view" href="javascript:void(0)" onclick='openStudentModal("${s.id}")' title="View">
