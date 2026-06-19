@@ -1,6 +1,11 @@
 <?php
 session_start();
 include "../connection.php";
+
+if (!isset($_SESSION['a'])) {
+    header("Location: /CampusHub/auth/adminLogin.php");
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -595,6 +600,133 @@ include "../connection.php";
             color: var(--neutral-400);
             margin-top: 2px;
         }
+
+        /* ─── LOGOUT MODAL ─── */
+
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-s);
+        }
+
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--neutral-200);
+            box-shadow: var(--shadow-xl);
+            padding: 32px 28px 28px;
+            width: 100%;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transform: translateY(12px) scale(0.98);
+            transition: transform var(--transition-s);
+        }
+
+        .modal-backdrop.open .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-icon-wrap {
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-lg);
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-icon-wrap i {
+            font-size: 24px;
+            color: #DC2626;
+        }
+
+        .modal-title {
+            font-family: var(--font-heading);
+            font-size: var(--text-xl);
+            color: var(--neutral-800);
+            margin-bottom: 8px;
+        }
+
+        .modal-body {
+            font-size: var(--text-sm);
+            color: var(--neutral-500);
+            line-height: 1.6;
+            max-width: 300px;
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 9px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-200);
+            background: white;
+            color: var(--neutral-600);
+            font-size: var(--text-sm);
+            font-weight: 500;
+            font-family: var(--font-body);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .btn-cancel:hover {
+            background: var(--neutral-100);
+            border-color: var(--neutral-300);
+            color: var(--neutral-700);
+        }
+
+        .btn-logout {
+            flex: 1;
+            padding: 9px 16px;
+            border-radius: var(--radius-md);
+            background: #DC2626;
+            color: white;
+            font-size: var(--text-sm);
+            font-weight: 500;
+            font-family: var(--font-body);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all var(--transition);
+        }
+
+        .btn-logout:hover {
+            background: #B91C1C;
+        }
+
+        .btn-logout i {
+            font-size: 15px;
+        }
     </style>
 </head>
 
@@ -615,6 +747,10 @@ include "../connection.php";
         </div>
 
         <nav class="nav">
+
+            <?php
+            $page = '';
+            ?>
 
             <div class="nav-section">
                 <a class="nav-link <?= ($page === 'dashboard') ? 'active' : '' ?>" href="?page=dashboard">
@@ -724,10 +860,10 @@ include "../connection.php";
                 <div class="header-right">
 
                     <div class="admin-chip">
-                        <div class="avatar">A</div>
-                        <span class="admin-name">Admin</span>
+                        <div class="avatar"><i class="ti ti-user"></i></div>
+                        <span class="admin-name"><?php echo $_SESSION['a']['name']; ?></span>
                     </div>
-                    <a class="notif-btn" href="#" title="Notifications">
+                    <a class="notif-btn" href="#" title="Log out" onclick="openLogoutModal(); return false;">
                         <i class="ti ti-logout"></i>
                     </a>
                 </div>
@@ -750,6 +886,26 @@ include "../connection.php";
 
     </div>
 
+    <!-- Logout Confirmation Modal -->
+    <div class="modal-backdrop" id="logoutModal" onclick="closeLogoutModal(event)">
+        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+            <div class="modal-icon-wrap">
+                <i class="ti ti-logout"></i>
+            </div>
+            <h2 class="modal-title" id="logoutModalTitle">Log out?</h2>
+            <p class="modal-body">
+                You're about to log out of the admin portal. Any unsaved changes will be lost.
+                Are you sure you want to continue?
+            </p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Stay logged in</button>
+                <a href="../process/adminLogout.php" class="btn-logout">
+                    <i class="ti ti-logout"></i> Log me out
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script>
         function toggleSub(id, el) {
             const sub = document.getElementById(id);
@@ -757,6 +913,26 @@ include "../connection.php";
             sub.classList.toggle('open', !isOpen);
             el.classList.toggle('open', !isOpen);
         }
+
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('logoutModal').classList.remove('open');
+        }
+
+        function closeLogoutModal(e) {
+            // close only when clicking the backdrop itself, not the box inside
+            if (e.target === document.getElementById('logoutModal')) closeModal();
+        }
+
+        // close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        
     </script>
 
 </body>
