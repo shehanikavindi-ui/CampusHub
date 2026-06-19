@@ -850,36 +850,6 @@ include "connection.php";
                 </article>
 
                 <aside class="profile-side-stack">
-                    <article class="profile-card profile-section">
-                        <div class="profile-section-head">
-                            <h2 class="profile-section-title">Joined clubs</h2>
-                            <span class="profile-count">3</span>
-                        </div>
-
-                        <div class="joined-list">
-                            <div class="joined-item">
-                                <span class="joined-icon"><i class="bi bi-camera"></i></span>
-                                <div>
-                                    <h3>Photography Club</h3>
-                                    <p>Member · Joined Jan 2026</p>
-                                </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon joined-icon--blue"><i class="bi bi-code-slash"></i></span>
-                                <div>
-                                    <h3>ICT Society</h3>
-                                    <p>Volunteer · Joined Mar 2026</p>
-                                </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon joined-icon--amber"><i class="bi bi-chat-quote"></i></span>
-                                <div>
-                                    <h3>Debate Society</h3>
-                                    <p>Member · Joined Apr 2026</p>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
 
                     <article class="profile-card profile-section">
                         <div class="profile-section-head">
