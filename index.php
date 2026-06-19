@@ -283,7 +283,11 @@ include "connection.php";
         }
         ?>
 
-
+            <!-- toast -->
+            <div class="toast-msg" id="toast-msg" >
+                <i id="toast-icon" class="bi bi-x-circle-fill"></i>
+                <span id="toast-text" class="toast-text"></span>
+            </div>
 
 
         <!-- ===================== QUICK HIGHLIGHTS STRIP ===================== -->
@@ -391,34 +395,50 @@ include "connection.php";
                     ORDER BY e.id DESC";
 
                 $events_rs = Database::search($q);
-                $events_num = $events_rs->num_rows;
 
-                for ($e=0; $e < $events_num; $e++) { 
+                for ($e=0; $e < 3; $e++) { 
                     $events_data = $events_rs->fetch_assoc();
                     ?>
+
                     <article class="event-card">
                         <div class="event-img event-img--cultural">
-                            <i class="fa-solid fa-masks-theater event-img-icon"></i>
+                            <?php
+                            if (!$events_data['banner_img']) {
+                                ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
+                            } else {
+                                ?>
+                                <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
+                                <?php
+                            }
+                            ?>
+                            
                             <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
                             <div class="event-date-pill">
-                                <b>25</b><span>Jun</span>
+                                <?php
+                                $date = date("d M", strtotime($events_data['date']));
+                                $day = date("d", strtotime($events_data['date']));
+                                $month = date("M", strtotime($events_data['date']));
+                                ?>
+                                <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
                             </div>
                         </div>
                         <div class="event-body">
                             <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 6:00 PM – 10:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Open Air Theatre</span>
+                                <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> - <?php echo $events_data['end_time']; ?> </span>
+                                <span><i class="fa-solid fa-location-dot"></i> <?php echo $events_data['location']; ?></span>
                             </div>
-                            <h3 class="event-title">Cultural Festival Night</h3>
-                            <p class="event-desc">A vibrant celebration of diversity through performances, art, food, and music from students across all institutions.</p>
+                            <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
+                            <p class="event-desc"><?php echo $events_data['description']; ?></p>
                             <div class="event-footer">
                                 <div class="event-capacity">
                                     <div class="capacity-bar">
                                         <div class="capacity-fill" style="width:45%"></div>
                                     </div>
-                                    <span class="capacity-label">225 / 500 spots</span>
+                                    <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
                                 </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
+                                <button class="btn btn-primary btn-sm" 
+                                    onclick="registerEvent(<?php echo $events_data['id']; ?>, <?php echo $_SESSION['u']['id']; ?>);">
+                                    Register</button>
                             </div>
                         </div>
                     </article>
@@ -426,146 +446,12 @@ include "connection.php";
                 }
                 ?>
 
-                    
-                    <article class="event-card">
-                        <div class="event-img event-img--cultural">
-                            <i class="fa-solid fa-masks-theater event-img-icon"></i>
-                            <span class="event-cat-badge">Cultural</span>
-                            <div class="event-date-pill">
-                                <b>25</b><span>Jun</span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 6:00 PM – 10:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Open Air Theatre</span>
-                            </div>
-                            <h3 class="event-title">Cultural Festival Night</h3>
-                            <p class="event-desc">A vibrant celebration of diversity through performances, art, food, and music from students across all institutions.</p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:45%"></div>
-                                    </div>
-                                    <span class="capacity-label">225 / 500 spots</span>
-                                </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
-                            </div>
-                        </div>
-                    </article>
 
-                    <article class="event-card">
-                        <div class="event-img event-img--workshop">
-                            <i class="fa-solid fa-users-gear event-img-icon"></i>
-                            <span class="event-cat-badge">Workshop</span>
-                            <div class="event-date-pill">
-                                <b>05</b><span>Jul</span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 10:00 AM – 1:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Room 204, Block B</span>
-                            </div>
-                            <h3 class="event-title">Leadership Workshop Series</h3>
-                            <p class="event-desc">Develop essential leadership skills through interactive sessions with experienced mentors, coaches, and peers.</p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:30%"></div>
-                                    </div>
-                                    <span class="capacity-label">15 / 50 spots</span>
-                                </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="event-card">
-                        <div class="event-img event-img--competition">
-                            <i class="fa-solid fa-comments event-img-icon"></i>
-                            <span class="event-cat-badge">Competition</span>
-                            <div class="event-date-pill">
-                                <b>12</b><span>Jul</span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 9:00 AM - 6:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Conference Hall A</span>
-                            </div>
-                            <h3 class="event-title">Inter-University Debate Championship</h3>
-                            <p class="event-desc">Represent your institution in this prestigious annual debate competition with cash prizes and perpetual trophies.</p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:60%"></div>
-                                    </div>
-                                    <span class="capacity-label">24 / 40 spots</span>
-                                </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="event-card">
-                        <div class="event-img event-img--sports">
-                            <i class="fa-solid fa-person-running event-img-icon"></i>
-                            <span class="event-cat-badge">Sports</span>
-                            <div class="event-date-pill">
-                                <b>18</b><span>Jul</span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 7:00 AM – 5:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Sports Complex</span>
-                            </div>
-                            <h3 class="event-title">Annual Sports Day 2025</h3>
-                            <p class="event-desc">Compete in track & field, team sports, and individual events. Win for your faculty and claim the championship shield.</p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar capacity-bar--full">
-                                        <div class="capacity-fill" style="width:92%"></div>
-                                    </div>
-                                    <span class="capacity-label">460 / 500 spots</span>
-                                </div>
-                                <a href="#" class="btn btn-secondary btn-sm">Waitlist</a>
-                            </div>
-                        </div>
-                    </article>
-
-                    <article class="event-card">
-                        <div class="event-img event-img--academic">
-                            <i class="fa-solid fa-microscope event-img-icon"></i>
-                            <span class="event-cat-badge">Academic</span>
-                            <div class="event-date-pill">
-                                <b>22</b><span>Jul</span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 2:00 PM – 5:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Library Hall</span>
-                            </div>
-                            <h3 class="event-title">Research Symposium & Poster Presentation</h3>
-                            <p class="event-desc">Showcase your research and receive expert feedback from faculty and industry professionals at this annual academic showcase.</p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:20%"></div>
-                                    </div>
-                                    <span class="capacity-label">10 / 50 spots</span>
-                                </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
-                            </div>
-                        </div>
-                    </article>
 
                 </div>
 
                 <div class="section-footer">
-                    <a href="#" class="btn btn-outline-primary">View All Events</a>
+                    <a href="events.php" class="btn btn-outline-primary">View All Events</a>
                 </div>
             </div>
         </section>
@@ -733,56 +619,6 @@ include "connection.php";
             </div>
         </section>
 
-        <!-- ===================== TESTIMONIALS ===================== -->
-        <section class="section section--soft" id="testimonials">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Student Voices</span>
-                    <h2 class="section-title">What Students Say</h2>
-                    <p class="section-subtitle">Real experiences from students across our partner institutions.</p>
-                </div>
-
-                <div class="testimonials-grid">
-
-                    <div class="testi-card">
-                        <div class="testi-quote">&ldquo;</div>
-                        <p class="testi-text">CampusHub completely changed how I experience university life. I found my debate team, registered for workshops, and made friends across faculties — all in one place.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar testi-avatar--1">AK</div>
-                            <div>
-                                <p class="testi-name">Aisha Khan</p>
-                                <p class="testi-role">2nd Year, Law &middot; University of Sunway</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testi-card testi-card--featured">
-                        <div class="testi-quote">&ldquo;</div>
-                        <p class="testi-text">As a club president, managing registrations used to be a nightmare. With CampusHub's admin tools, it's completely seamless. Our event turnout has tripled since we started using it.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar testi-avatar--2">MR</div>
-                            <div>
-                                <p class="testi-name">Marcus Raj</p>
-                                <p class="testi-role">President, Tech Society &middot; MMU</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="testi-card">
-                        <div class="testi-quote">&ldquo;</div>
-                        <p class="testi-text">I never knew there were so many events happening on campus until I found CampusHub. The notifications keep me updated and I haven't missed a single event I cared about.</p>
-                        <div class="testi-author">
-                            <div class="testi-avatar testi-avatar--3">SP</div>
-                            <div>
-                                <p class="testi-name">Sara Priya</p>
-                                <p class="testi-role">3rd Year, Engineering &middot; UTP</p>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
 
         <?php
         if (!isset($_SESSION["u"])) {
@@ -869,6 +705,7 @@ include "connection.php";
         });
         reveals.forEach(el => observer.observe(el));
     </script>
+    <script src="js/main.js"></script>
 
 </body>
 

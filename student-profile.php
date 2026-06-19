@@ -852,9 +852,19 @@ include "connection.php";
                 <aside class="profile-side-stack">
 
                     <article class="profile-card profile-section">
+
+                    <?php
+                    $q = "SELECT r.*, e.title, e.description, e.date, e.start_time, e.end_time, e.location, e.banner_img, e.capacity
+                        FROM registration r INNER JOIN event e ON r.event_id = e.id
+                        WHERE r.student_id = '" . $_SESSION['u']['id'] . "' ORDER BY e.date DESC";
+
+                    $myRegistrations_rs = Database::search($q);
+                    $myRegistrations_num = $myRegistrations_rs->num_rows;
+                    ?>
+
                         <div class="profile-section-head">
                             <h2 class="profile-section-title">Joined events</h2>
-                            <span class="profile-count">4</span>
+                            <span class="profile-count"><?php echo $myRegistrations_num; ?></span>
                         </div>
 
                         <div class="joined-list">
