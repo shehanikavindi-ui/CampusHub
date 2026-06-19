@@ -558,30 +558,6 @@ include "../connection.php";
             background: var(--neutral-50);
         }
 
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            font-size: 11.5px;
-            padding: 2px 8px;
-            border-radius: var(--radius-full);
-            font-weight: 500;
-        }
-
-        .pill-green {
-            background: #D1FAE5;
-            color: #065F46;
-        }
-
-        .pill-amber {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .pill-red {
-            background: #FEE2E2;
-            color: #991B1B;
-        }
-
         /* Activity Feed */
 
         .activity-item {
