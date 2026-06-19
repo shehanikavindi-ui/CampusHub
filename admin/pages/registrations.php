@@ -673,7 +673,9 @@
                         class="ti ti-x"></i></button>
             </div>
 
-            <button class="rg-btn rg-btn-ghost" type="button"><i class="ti ti-download"></i> Export CSV</button>
+            <button class="rg-btn rg-btn-primary" type="button" onclick="exportRegistrationsCSV()">
+                <i class="ti ti-download"></i> Export
+            </button>
         </div>
 
         <div class="rg-search-hint">
@@ -697,36 +699,95 @@
                 </thead>
                 <tbody id="rg-table-body">
 
-                    <tr data-student="Nadeesha Senanayake nadeesha.s@campushub.edu" data-event="Orientation Day 2026"
-                        data-status="confirmed" data-category="academic">
-                        <td>
-                            <div class="rg-user-cell">
-                                <div class="rg-avatar">NS</div>
-                                <div>
-                                    <div class="rg-user-name">Nadeesha Senanayake</div>
-                                    <div class="rg-user-email">nadeesha.s@campushub.edu</div>
+                    <?php
+
+                    $q = "
+    SELECT
+        r.*,
+        s.fname,
+        s.lname,
+        s.email,
+        e.title AS event_title,
+        e.date AS event_date,
+        e.location,
+        i.name AS institution_name
+    FROM registration r
+    INNER JOIN student s ON r.student_id = s.id
+    INNER JOIN event e ON r.event_id = e.id
+    INNER JOIN institution i ON e.institution_id = i.id
+    ORDER BY r.date DESC
+";
+
+                    $rs = Database::search($q);
+
+                    while ($row = $rs->fetch_assoc()) {
+
+                        $studentName = $row["fname"] . " " . $row["lname"];
+                        $email = $row["email"];
+
+                        $initials =
+                            strtoupper(substr($row["fname"], 0, 1)) .
+                            strtoupper(substr($row["lname"], 0, 1));
+
+                        ?>
+
+                        <tr data-student="<?= strtolower($studentName . ' ' . $email) ?>"
+                            data-event="<?= strtolower($row['event_title']) ?>">
+
+                            <td>
+                                <div class="rg-user-cell">
+                                    <div class="rg-avatar">
+                                        <?= $initials ?>
+                                    </div>
+
+                                    <div>
+                                        <div class="rg-user-name">
+                                            <?= $studentName ?>
+                                        </div>
+                                        <div class="rg-user-email">
+                                            <?= $email ?>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="rg-event-cell">
-                                <span class="rg-event-dot academic"></span>
-                                <div>
-                                    <div class="rg-event-name">Orientation Day 2026</div>
-                                    <div class="rg-event-date">Jun 22, 2026</div>
+                            </td>
+
+                            <td>
+                                <div class="rg-event-cell">
+                                    <div>
+                                        <div class="rg-event-name">
+                                            <?= $row["event_title"] ?>
+                                        </div>
+
+                                        <div class="rg-event-date">
+                                            <?= date("M d, Y", strtotime($row["event_date"])) ?>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="rg-event-cell">
-                                <div>
-                                    <div class="rg-event-name">Main Hall</div>
-                                    <div class="rg-event-date">CampusHub University</div>
+                            </td>
+
+                            <td>
+                                <div class="rg-event-cell">
+                                    <div>
+                                        <div class="rg-event-name">
+                                            <?= $row["location"] ?>
+                                        </div>
+
+                                        <div class="rg-event-date">
+                                            <?= $row["institution_name"] ?>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                        <td>Jun 10, 2026</td>
-                    </tr>
+                            </td>
+
+                            <td>
+                                <?= date("M d, Y", strtotime($row["date"])) ?>
+                            </td>
+
+                        </tr>
+
+                        <?php
+                    }
+                    ?>
 
                 </tbody>
             </table>
@@ -741,14 +802,8 @@
 
         <!-- ===== Pagination ===== -->
         <div class="regs-footer">
-            <div class="rg-page-info">Showing <b id="rg-count-showing">9</b> of <b>892</b> registrations</div>
-            <div class="rg-page-controls">
-                <button class="rg-page-btn" disabled><i class="ti ti-chevron-left"></i></button>
-                <button class="rg-page-btn active">1</button>
-                <button class="rg-page-btn">2</button>
-                <button class="rg-page-btn">3</button>
-                <button class="rg-page-btn">&hellip;</button>
-                <button class="rg-page-btn"><i class="ti ti-chevron-right"></i></button>
+            <div class="rg-page-info">
+                Showing <b id="rg-count-showing">0</b> </b> registrations
             </div>
         </div>
     </div>
@@ -756,50 +811,162 @@
 </div>
 
 <script>
+
+    const ROWS_PER_PAGE = 10;
+    let currentPage = 1;
+    let allRows = Array.from(document.querySelectorAll("#rg-table-body tr"));
+    let filteredRows = [...allRows];
     (function () {
-        var searchInput = document.getElementById('rg-search-input');
-        var clearBtn = document.getElementById('rg-search-clear');
-        var statusFilter = document.getElementById('rg-filter-status');
-        var categoryFilter = document.getElementById('rg-filter-category');
-        var rows = Array.prototype.slice.call(document.querySelectorAll('#rg-table-body tr'));
-        var emptyState = document.getElementById('rg-empty');
-        var tableScroll = document.querySelector('.rg-table-scroll');
-        var countShowing = document.getElementById('rg-count-showing');
+
+        const searchInput = document.getElementById('rg-search-input');
+        const clearBtn = document.getElementById('rg-search-clear');
+        const rows = document.querySelectorAll('#rg-table-body tr');
+        const emptyState = document.getElementById('rg-empty');
+        const tableScroll = document.querySelector('.rg-table-scroll');
+        const countShowing = document.getElementById('rg-count-showing');
 
         function applyFilters() {
-            var query = searchInput.value.trim().toLowerCase();
-            var statusVal = statusFilter.value;
-            var categoryVal = categoryFilter.value;
-            var visibleCount = 0;
 
-            rows.forEach(function (row) {
-                var studentText = (row.getAttribute('data-student') || '').toLowerCase();
-                var eventText = (row.getAttribute('data-event') || '').toLowerCase();
-                var statusVal2 = row.getAttribute('data-status');
-                var categoryVal2 = row.getAttribute('data-category');
+            const query = searchInput.value.trim().toLowerCase();
 
-                var matchesQuery = !query || studentText.indexOf(query) !== -1 || eventText.indexOf(query) !== -1;
-                var matchesStatus = !statusVal || statusVal === statusVal2;
-                var matchesCategory = !categoryVal || categoryVal === categoryVal2;
+            filteredRows = allRows.filter(row => {
 
-                var visible = matchesQuery && matchesStatus && matchesCategory;
-                row.style.display = visible ? '' : 'none';
-                if (visible) visibleCount++;
+                const studentText = (row.dataset.student || '').toLowerCase();
+                const eventText = (row.dataset.event || '').toLowerCase();
+
+                return !query ||
+                    studentText.includes(query) ||
+                    eventText.includes(query);
             });
 
-            emptyState.classList.toggle('show', visibleCount === 0);
-            tableScroll.style.display = visibleCount === 0 ? 'none' : '';
-            countShowing.textContent = visibleCount;
+            currentPage = 1;
+            updatePagination();
         }
 
         searchInput.addEventListener('input', applyFilters);
-        statusFilter.addEventListener('change', applyFilters);
-        categoryFilter.addEventListener('change', applyFilters);
 
         clearBtn.addEventListener('click', function () {
             searchInput.value = '';
             applyFilters();
             searchInput.focus();
         });
+
+        applyFilters();
+
     })();
+
+    function updatePagination() {
+
+        const totalRows = filteredRows.length;
+        const totalPages = Math.ceil(totalRows / ROWS_PER_PAGE);
+
+        allRows.forEach(row => row.style.display = "none");
+
+        const start = (currentPage - 1) * ROWS_PER_PAGE;
+        const end = start + ROWS_PER_PAGE;
+
+        filteredRows.slice(start, end).forEach(row => {
+            row.style.display = "";
+        });
+
+        document.getElementById("rg-count-showing").textContent = totalRows;
+
+        emptyState.classList.toggle('show', totalRows === 0);
+        tableScroll.style.display = totalRows === 0 ? 'none' : '';
+
+        renderPagination(totalPages);
+    }
+
+    function renderPagination(totalPages) {
+
+        const container = document.querySelector(".rg-page-controls");
+
+        if (totalPages <= 1) {
+            container.innerHTML = "";
+            return;
+        }
+
+        let html = `
+        <button class="rg-page-btn"
+            onclick="goPage(${currentPage - 1})"
+            ${currentPage === 1 ? "disabled" : ""}>
+            <i class="ti ti-chevron-left"></i>
+        </button>
+    `;
+
+        for (let i = 1; i <= totalPages; i++) {
+            html += `
+            <button class="rg-page-btn ${i === currentPage ? "active" : ""}"
+                onclick="goPage(${i})">
+                ${i}
+            </button>
+        `;
+        }
+
+        html += `
+        <button class="rg-page-btn"
+            onclick="goPage(${currentPage + 1})"
+            ${currentPage === totalPages ? "disabled" : ""}>
+            <i class="ti ti-chevron-right"></i>
+        </button>
+    `;
+
+        container.innerHTML = html;
+    }
+
+    function goPage(page) {
+
+        const totalPages = Math.ceil(filteredRows.length / ROWS_PER_PAGE);
+
+        if (page < 1 || page > totalPages) return;
+
+        currentPage = page;
+        updatePagination();
+    }
+
+    function exportRegistrationsCSV() {
+
+        let csv = [];
+
+        const rows = document.querySelectorAll("#rg-table tr");
+
+        rows.forEach((row) => {
+
+            if (row.style.display === "none") return;
+
+            let cols = row.querySelectorAll("th, td");
+            let rowData = [];
+
+            cols.forEach((col) => {
+                let text = col.innerText
+                    .replace(/\n/g, " ")
+                    .replace(/\s+/g, " ")
+                    .trim()
+                    .replace(/"/g, '""');
+
+                rowData.push(`"${text}"`);
+            });
+
+            csv.push(rowData.join(","));
+        });
+
+        const csvContent = csv.join("\n");
+
+        const blob = new Blob([csvContent], {
+            type: "text/csv;charset=utf-8;"
+        });
+
+        const link = document.createElement("a");
+
+        const url = URL.createObjectURL(blob);
+
+        link.href = url;
+        link.download = "registrations.csv";
+
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
+    }
 </script>
