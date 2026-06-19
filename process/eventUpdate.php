@@ -12,19 +12,22 @@ $category = $_POST['category'];
 $institution = $_POST['institution'];
 $status = $_POST['status'];
 
-// image handling
 $imgQuery = "";
 
-if (isset($_FILES["image"])) {
+if (isset($_FILES["image"]) && $_FILES["image"]["error"] === UPLOAD_ERR_OK) {
 
-    $img = $_FILES["image"]["name"];
-    $tmp = $_FILES["image"]["tmp_name"];
+    $upload_dir = "../uploads/events/";
 
-    $path = "../uploads/events/" . $img;
+    $ext = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
 
-    move_uploaded_file($tmp, $path);
+    // SAME FORMAT AS CREATE
+    $filename = uniqid("event_", true) . "." . $ext;
 
-    $imgQuery = ", `banner_img` = '$img'";
+    $target = $upload_dir . $filename;
+
+    if (move_uploaded_file($_FILES["image"]["tmp_name"], $target)) {
+        $imgQuery = ", `banner_img` = '$filename'";
+    }
 }
 
 $query = "
