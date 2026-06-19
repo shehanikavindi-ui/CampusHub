@@ -73,11 +73,10 @@ function studentRegister() {
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
-            console.log('Raw response:', JSON.stringify(request.responseText));
             var response = request.responseText.trim();
             if (response === "success") {
                 showToast("Account created successfully!", "success");
-                setTimeout(() => window.location.href = "studentDashboard.html", 1500);
+                setTimeout(() => window.location.href = "studentLogin.php", 1500);
             } else if (response === "exists") {
                 showToast("An account with this email already exists.");
             } else if (response === "invalid email") {
@@ -114,7 +113,7 @@ function studentLogin() {
             var response = request.responseText;
             if (response == "success") {
                 showToast("Login successful! ✓", "success");
-                setTimeout(() => window.location.href = "index.php", 1500);
+                setTimeout(() => window.location = "../index.php", 1500);
             } else if (response == "invalid") {
                 showToast("⚠ Invalid email or password!");
             } else {
@@ -211,7 +210,7 @@ function resetPassword() {    /* ── STEP 3 — reset password ── */
     var request = new XMLHttpRequest();
     request.onreadystatechange = function () {
         if (request.readyState == 4 && request.status == 200) {
-            const response = request.responseText.trim();
+            var response = request.responseText.trim();
             if (response === 'success') {
                 goToStep(4);
             } else {
@@ -228,3 +227,31 @@ function resendOtp() {
     sendOtp();
     startResendTimer(60);
 }   
+
+function adminLogin() {
+    var email = document.getElementById('email');
+    var password = document.getElementById('password');
+
+    var form = new FormData();
+    form.append("em", email.value);
+    form.append("pw", password.value);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (request.readyState == 4 && request.status == 200) {
+            var response = request.responseText;
+            if (response == "success") {
+                showToast("Login successful! ✓", "success");
+                setTimeout(() => {
+                    window.location = "adminDashboard.php";
+                }, 1500);
+            } else if (response == "invalid") {
+                showToast("Invalid email or password!");
+            } else {
+                showToast("Something went wrong!");
+            }
+        }
+    }
+    request.open("POST", "../process/adminLogin.php", true);
+    request.send(form);
+}

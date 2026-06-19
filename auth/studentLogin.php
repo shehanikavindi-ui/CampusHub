@@ -186,7 +186,7 @@
             <!-- Admin link -->
             <div class="auth-admin-link">
                 <i class="bi bi-shield-lock"></i>
-                <a href="#">Administrator Login</a>
+                <a href="adminLogin.php">Administrator Login</a>
             </div>
 
         </div>

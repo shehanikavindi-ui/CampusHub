@@ -364,12 +364,6 @@ em { font-style: italic; }
     height: var(--header-h);
     display: flex;
     align-items: center;
-    transition: background var(--transition-s), box-shadow var(--transition-s),
-                backdrop-filter var(--transition-s);
-    background: transparent;
-}
-
-.header--scrolled {
     background: rgba(255,255,255,0.92);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -390,12 +384,11 @@ em { font-style: italic; }
     font-family: var(--font-heading);
     font-size: var(--text-xl);
     font-weight: 700;
-    color: #fff;
+    color: var(--text-primary); 
     letter-spacing: -0.01em;
     flex-shrink: 0;
     transition: color var(--transition);
 }
-.header--scrolled .nav-logo { color: var(--text-primary); }
 
 .nav-logo-icon {
     font-size: 1.4rem;
@@ -416,28 +409,27 @@ em { font-style: italic; }
 .nav-link {
     font-size: var(--text-sm);
     font-weight: 500;
-    color: rgba(255,255,255,0.8);
+    color: var(--text-secondary);
     padding: 0.4rem 0.75rem;
     border-radius: var(--radius-md);
     transition: var(--transition);
     position: relative;
 }
-.nav-link:hover,
-.nav-link.active { color: #fff; }
+.nav-link:hover {
+    color: var(--primary); 
+    background: var(--teal-50);
+}
+.nav-link.active { color: var(--primary); }
+
 .nav-link.active::after {
     content: '';
     position: absolute;
     inset-block-end: 0;
     inset-inline: 0.75rem;
     height: 2px;
-    background: var(--teal-400);
+    background: var(--primary);
     border-radius: 1px;
 }
-
-.header--scrolled .nav-link           { color: var(--text-secondary); }
-.header--scrolled .nav-link:hover     { color: var(--primary); background: var(--teal-50); }
-.header--scrolled .nav-link.active    { color: var(--primary); }
-.header--scrolled .nav-link.active::after { background: var(--primary); }
 
 /* Nav actions */
 .nav-actions {
@@ -446,13 +438,7 @@ em { font-style: italic; }
     gap: 0.5rem;
     margin-inline-start: auto;
 }
-.header:not(.header--scrolled) .nav-actions .btn-ghost {
-    color: rgba(255,255,255,0.8);
-}
-.header:not(.header--scrolled) .nav-actions .btn-ghost:hover {
-    color: #fff;
-    background: rgba(255,255,255,0.08);
-}
+
 
 /* Hamburger */
 .nav-toggle {
@@ -466,12 +452,12 @@ em { font-style: italic; }
     display: block;
     width: 22px;
     height: 2px;
-    background: #fff;
+    background: var(--text-primary);
     border-radius: 2px;
     transition: var(--transition);
     transform-origin: center;
 }
-.header--scrolled .nav-toggle span { background: var(--text-primary); }
+
 .nav-toggle--open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
 .nav-toggle--open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
 .nav-toggle--open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -1647,3 +1633,23 @@ em { font-style: italic; }
     }
     html { scroll-behavior: auto; }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
