@@ -5,11 +5,11 @@
             Campus<span class="logo-accent">Hub</span>
         </a>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#home" class="nav-link active">Home</a></li>
+            <li><a href="index.php" class="nav-link active">Home</a></li>
             <li><a href="#events" class="nav-link">Events</a></li>
             <li><a href="#clubs" class="nav-link">Clubs</a></li>
             <li><a href="#gallery" class="nav-link">Gallery</a></li>
-            <li><a href="#announcements" class="nav-link">News</a></li>
+            <li><a href="announcements.php" class="nav-link">Announcements</a></li>
             <li><a href="#contact" class="nav-link">Contact</a></li>
         </ul>
         <div class="nav-actions">

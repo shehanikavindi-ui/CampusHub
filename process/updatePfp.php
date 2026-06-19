@@ -18,17 +18,16 @@ if (!in_array($ext, $allowed)) {
 }
 
 $newFileName = uniqid('pfp_', true) . '.' . $ext;
-$destination = __DIR__ . '/uploads/profiles/' . $newFileName;
+$destination = __DIR__ . '/../uploads/profiles/' . $newFileName;
 
 if (!move_uploaded_file($tmpPath, $destination)) {
-    echo "Upload failed.";
+    echo ("Upload failed.");
     exit;
 }
 
 $studentId = $_SESSION['u']['id'];
-$q = "UPDATE student SET pfp = '" . $newFileName . "' WHERE id = '" . $studentId . "'";
-Database::search($q);
+Database::iud("UPDATE `student` SET `pfp` = '" . $newFileName . "' WHERE id = '" . $studentId . "'");
 
-echo "success";
+echo ("success");
 
 ?>

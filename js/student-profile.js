@@ -77,7 +77,7 @@ function saveProfilePfp() {
                     window.location.reload();
                 }, 1200);
             } else {
-                showToast("error", response);
+                showToast(response, "error");
             }
         }
     }

@@ -256,13 +256,14 @@ include "connection.php";
         }
 
         .profile-img {
-            display: grid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 82px;
             height: 82px;
             flex: 0 0 auto;
             border-radius: 50%;
             overflow: hidden;
-            place-items: center;
         }
 
         .profile-img img {

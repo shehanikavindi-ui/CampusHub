@@ -13,7 +13,6 @@ include "connection.php";
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-
     
 </head>
 <body>
@@ -138,69 +137,46 @@ include "connection.php";
                 </div>
 
                 <div class="announcements-grid">
-                    <article class="ann-card ann-card--urgent">
-                        <div class="ann-accent"></div>
-                        <div class="ann-body">
-                            <div class="ann-meta">
-                                <span class="ann-badge ann-badge--urgent">
-                                    <i class="fa-solid fa-circle-exclamation"></i> Urgent
-                                </span>
-                                <time class="ann-date">June 15, 2025</time>
-                            </div>
-                            <h3 class="ann-title">Spring 2025 Semester Registration Now Open</h3>
-                            <p class="ann-text">All students are required to complete their semester registration by June 30. Late registrations will incur an additional fee. Visit the student portal to begin your registration process.</p>
-                            <a href="#" class="ann-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </article>
 
-                    <article class="ann-card ann-card--event">
-                        <div class="ann-accent"></div>
-                        <div class="ann-body">
-                            <div class="ann-meta">
-                                <span class="ann-badge ann-badge--event">
-                                    <i class="fa-solid fa-trophy"></i> Event
-                                </span>
-                                <time class="ann-date">June 12, 2025</time>
-                            </div>
-                            <h3 class="ann-title">Annual Sports Day — Registration Deadline Extended</h3>
-                            <p class="ann-text">Due to overwhelming interest, the registration deadline for Annual Sports Day has been extended to June 22. Register your team now and compete for the championship title.</p>
-                            <a href="#" class="ann-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </article>
+                    <?php
+                    $q = "SELECT a.*, c.name AS category_name, c.color AS category_color, i.name AS institution_name
+                        FROM announcements a
+                        INNER JOIN category c ON a.category_id = c.id
+                        LEFT JOIN institution i ON a.institution_id = i.id
+                        ORDER BY a.id DESC";
 
-                    <article class="ann-card ann-card--info">
-                        <div class="ann-accent"></div>
-                        <div class="ann-body">
-                            <div class="ann-meta">
-                                <span class="ann-badge ann-badge--info">
-                                    <i class="fa-solid fa-camera"></i> Competition
-                                </span>
-                                <time class="ann-date">June 10, 2025</time>
-                            </div>
-                            <h3 class="ann-title">Campus Photography Competition 2025</h3>
-                            <p class="ann-text">Submit your best campus photographs for a chance to win exciting prizes. This year's theme: <em>"Moments That Matter."</em> Submissions open until July 1, 2025.</p>
-                            <a href="#" class="ann-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </article>
+                    $announcements_rs = Database::search($q);
+                    
 
-                    <article class="ann-card ann-card--general">
-                        <div class="ann-accent"></div>
-                        <div class="ann-body">
-                            <div class="ann-meta">
-                                <span class="ann-badge ann-badge--general">
-                                    <i class="fa-solid fa-bullhorn"></i> General
-                                </span>
-                                <time class="ann-date">June 8, 2025</time>
+                    for ($a=0; $a < 3; $a++) { 
+                        $announcements_data = $announcements_rs->fetch_assoc();
+                        $categoryColor = $announcements_data['category_color'] ?? '#9CA3AF';
+                        ?>
+                        <article class="ann-card ann-card--event"
+                        style="--ann-color: <?php echo htmlspecialchars($categoryColor); ?>;
+                            --ann-color-bg: color-mix(in srgb, <?php echo htmlspecialchars($categoryColor); ?> 15%, white);">
+                            <div class="ann-accent"></div>
+                            <div class="ann-body">
+                                <div class="ann-meta">
+                                    <span class="ann-badge ann-badge--event">
+                                        <i class="fa-solid fa-bullhorn"></i> <?php echo $announcements_data['category_name']; ?>
+                                    </span>
+                                </div>
+                                <h3 class="ann-title"><?php echo $announcements_data['title']; ?></h3>
+                                <p class="ann-text"><?php echo $announcements_data['description']; ?></p>
+                                <p class="ann-link"><?php echo $announcements_data['institution_name']; ?></p>
                             </div>
-                            <h3 class="ann-title">New Student Orientation Week Schedule Released</h3>
-                            <p class="ann-text">The full orientation schedule for incoming students has been published. Check the events section for detailed timings and venue information for each session and faculty tour.</p>
-                            <a href="#" class="ann-link">Read More <i class="fa-solid fa-arrow-right"></i></a>
-                        </div>
-                    </article>
+                        </article>
+                        <?php
+                    }
+                    ?>
+
+
+                    
                 </div>
 
                 <div class="section-footer">
-                    <a href="#" class="btn btn-outline-primary">View All Announcements</a>
+                    <a href="announcements.php" class="btn btn-outline-primary">View All Announcements</a>
                 </div>
             </div>
         </section>
