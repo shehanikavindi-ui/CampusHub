@@ -13,7 +13,9 @@ include "connection.php";
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
+    
     <style>
         .hero-auth {
             position: relative;
@@ -193,8 +195,8 @@ include "connection.php";
                         <?php echo htmlspecialchars($today); ?>
                     </div>
 
-                    <p class="hero-auth-kicker">Welcome back</p>
-                    <h1 class="hero-auth-title">Hi, <?php echo htmlspecialchars($studentName); ?></h1>
+                    <p class="hero-auth-kicker mt-2">Welcome back</p>
+                    <h1 class="hero-auth-title mt-3">Hi, <?php echo htmlspecialchars($studentName); ?></h1>
                     <p class="hero-auth-subtitle">Your campus community is buzzing today. Let's see what's happening.</p>
 
                     <div class="hero-auth-actions">
@@ -377,44 +379,18 @@ include "connection.php";
                     <p class="section-subtitle">From workshops to championships — there is something for every student.</p>
                 </div>
 
-                <div class="events-filter">
+                <!-- <div class="events-filter">
                     <button class="filter-btn active">All</button>
                     <button class="filter-btn">Academic</button>
                     <button class="filter-btn">Sports</button>
                     <button class="filter-btn">Cultural</button>
                     <button class="filter-btn">Workshops</button>
                     <button class="filter-btn">Competitions</button>
-                </div>
+                </div> -->
 
                 <div class="events-grid">
 
-                    <article class="event-card event-card--featured">
-                        <div class="event-img event-img--tech">
-                            <i class="fa-solid fa-rocket event-img-icon"></i>
-                            <span class="event-cat-badge">Academic</span>
-                            <div class="event-date-pill">
-                                <b>20</b><span>Jun</span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 9:00 AM – 5:00 PM</span>
-                                <span><i class="fa-solid fa-location-dot"></i> Main Auditorium</span>
-                            </div>
-                            <h3 class="event-title">Tech Innovation Summit 2025</h3>
-                            <p class="event-desc">Join industry leaders and students for a full day of innovation showcases, panel discussions, and networking opportunities.</p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:78%"></div>
-                                    </div>
-                                    <span class="capacity-label">156 / 200 spots</span>
-                                </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
-                            </div>
-                        </div>
-                    </article>
-
+                    
                     <article class="event-card">
                         <div class="event-img event-img--cultural">
                             <i class="fa-solid fa-masks-theater event-img-icon"></i>
@@ -479,7 +455,7 @@ include "connection.php";
                         </div>
                         <div class="event-body">
                             <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> 9:00 AM – 6:00 PM</span>
+                                <span><i class="fa-regular fa-clock"></i> 9:00 AM - 6:00 PM</span>
                                 <span><i class="fa-solid fa-location-dot"></i> Conference Hall A</span>
                             </div>
                             <h3 class="event-title">Inter-University Debate Championship</h3>
@@ -559,7 +535,7 @@ include "connection.php";
         </section>
 
         <!-- ===================== CLUBS & SOCIETIES ===================== -->
-        <section class="section section--white" id="clubs">
+        <!-- <section class="section section--white" id="clubs">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag">Get Involved</span>
@@ -665,7 +641,7 @@ include "connection.php";
                     <a href="#" class="btn btn-outline-primary">Browse All 80+ Clubs</a>
                 </div>
             </div>
-        </section>
+        </section> -->
 
         <!-- ===================== GALLERY ===================== -->
         <section class="section section--dark" id="gallery">
