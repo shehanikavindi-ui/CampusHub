@@ -5,6 +5,7 @@ include "connection.php";
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -400,6 +401,7 @@ include "connection.php";
         .pic-modal-actions .profile-btn {
             flex: 1;
         }
+
         /*  */
 
         .profile-summary h2 {
@@ -558,54 +560,146 @@ include "connection.php";
             font-weight: 900;
         }
 
-        .joined-list {
+        .joined-event-list {
             display: grid;
-            gap: 0.7rem;
+            gap: 1rem;
         }
 
-        .joined-item {
-            display: grid;
-            grid-template-columns: 42px 1fr;
-            gap: 0.7rem;
-            align-items: center;
-            padding: 0.75rem;
+        .joined-event-card {
             border: 1px solid var(--neutral-100);
             border-radius: var(--radius-lg);
             background: var(--bg-white);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
         }
 
-        .joined-icon {
-            display: grid;
-            width: 42px;
-            height: 42px;
-            border-radius: var(--radius-md);
-            background: var(--teal-50);
+        .joined-event-banner {
+            position: relative;
+            height: 86px;
+            background: linear-gradient(135deg, var(--teal-100), var(--violet-100));
+        }
+
+        .joined-event-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .joined-event-banner--empty {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .joined-event-banner--empty i {
+            font-size: 1.5rem;
             color: var(--primary-dark);
-            place-items: center;
+            opacity: 0.5;
         }
 
-        .joined-icon--blue {
-            background: var(--violet-50);
-            color: var(--secondary-dark);
-        }
-
-        .joined-icon--amber {
-            background: #FEF3C7;
-            color: #92400E;
-        }
-
-        .joined-item h3 {
-            margin: 0;
-            color: var(--text-primary);
-            font-family: var(--font-body);
-            font-size: var(--text-sm);
+        .joined-event-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            padding: 0.2rem 0.55rem;
+            border-radius: var(--radius-full);
+            background: var(--bg-white);
+            color: var(--primary-dark);
+            font-size: var(--text-xs);
             font-weight: 800;
         }
 
-        .joined-item p {
-            margin: 0.12rem 0 0;
+        .joined-event-date {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-md);
+            background: var(--bg-white);
+            line-height: 1.1;
+        }
+
+        .joined-event-date b {
+            font-size: var(--text-sm);
+            color: var(--text-primary);
+        }
+
+        .joined-event-date span {
+            font-size: 0.65rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+
+        .joined-event-body {
+            padding: 0.7rem 0.85rem;
+        }
+
+        .joined-event-title {
+            margin: 0 0 0.3rem;
+            font-family: var(--font-body);
+            font-size: var(--text-sm);
+            font-weight: 800;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .joined-event-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            margin: 0 0 0.55rem;
             color: var(--text-secondary);
             font-size: var(--text-xs);
+        }
+
+        .joined-event-dot {
+            color: var(--neutral-300);
+        }
+
+        .joined-event-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px solid var(--neutral-100);
+        }
+
+        .joined-event-institute {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: var(--text-muted);
+            font-size: var(--text-xs);
+            font-weight: 600;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .joined-event-status {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            flex: 0 0 auto;
+            color: var(--primary-dark);
+            font-size: var(--text-xs);
+            font-weight: 800;
+        }
+
+        .profile-empty-state {
+            padding: 1.5rem 0.5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: var(--text-sm);
         }
 
         .logout-panel {
@@ -643,6 +737,7 @@ include "connection.php";
         }
 
         @media (max-width: 980px) {
+
             .profile-hero,
             .profile-layout {
                 grid-template-columns: 1fr;
@@ -705,9 +800,9 @@ include "connection.php";
 
 
 <body>
-    
+
     <div class="profile-page"><br><br>
-        
+
         <?php
         include "header.php";
         ?>
@@ -715,7 +810,7 @@ include "connection.php";
         <main class="profile-main">
 
             <!-- toast -->
-            <div class="toast-msg" id="toast-msg" >
+            <div class="toast-msg" id="toast-msg">
                 <i id="toast-icon" class="bi bi-x-circle-fill"></i>
                 <span id="toast-text" class="toast-text"></span>
             </div>
@@ -723,23 +818,23 @@ include "connection.php";
             <section class="profile-layout mt-4">
                 <article class="profile-card profile-card-main" id="profileCard">
                     <div class="profile-card-inner">
-    
 
-                    <?php
-                    $q = "SELECT s.*, i.name AS institution_name, g.name AS gender_name,  c.name AS course_name, f.name AS faculty_name, 
+
+                        <?php
+                        $q = "SELECT s.*, i.name AS institution_name, g.name AS gender_name,  c.name AS course_name, f.name AS faculty_name, 
                         c.faculty_id, y.name AS year_name FROM student s INNER JOIN institution i ON s.institution_id = i.id
                         INNER JOIN gender g ON s.gender_id = g.id INNER JOIN yearOfStudy y ON s.yearOfStudy_id = y.id
                         INNER JOIN course c ON s.course_id = c.id INNER JOIN faculty f ON c.faculty_id = f.id 
-                        WHERE s.id = '".$_SESSION['u']['id']."' ";
-                    $student_rs = Database::search($q);
-                    $student_data = $student_rs->fetch_assoc();
+                        WHERE s.id = '" . $_SESSION['u']['id'] . "' ";
+                        $student_rs = Database::search($q);
+                        $student_data = $student_rs->fetch_assoc();
 
-                    $years_rs = Database::search("SELECT id, name FROM yearOfStudy ORDER BY id");
+                        $years_rs = Database::search("SELECT id, name FROM yearOfStudy ORDER BY id");
 
-                    
 
-                    ?>
-                        
+
+                        ?>
+
                         <div class="profile-summary">
 
                             <div class="profile-pic-wrap" id="profilePicTrigger">
@@ -757,7 +852,7 @@ include "connection.php";
                                     <i class="bi bi-pencil-fill"></i>
                                 </div>
                             </div>
-                            
+
 
                             <div>
                                 <h2><?php echo $student_data['fname'] . ' ' . $student_data['lname']; ?></h2>
@@ -845,7 +940,7 @@ include "connection.php";
                                 </button>
                             </div>
                         </form>
-                        
+
                     </div>
                 </article>
 
@@ -853,50 +948,65 @@ include "connection.php";
 
                     <article class="profile-card profile-section">
 
-                    <?php
-                    $q = "SELECT r.*, e.title, e.description, e.date, e.start_time, e.end_time, e.location, e.banner_img, e.capacity
-                        FROM registration r INNER JOIN event e ON r.event_id = e.id
-                        WHERE r.student_id = '" . $_SESSION['u']['id'] . "' ORDER BY e.date DESC";
+                        <?php
+                        $q = "SELECT r.id AS registration_id, r.student_id, r.date AS registered_date,e.id AS event_id, 
+                            e.title, e.description, e.date AS event_date, e.start_time,e.end_time, e.location, e.banner_img,e.capacity,
+                            i.name AS institution_name,c.name AS category_name FROM registration r 
+                            INNER JOIN event e ON r.event_id = e.id INNER JOIN institution i ON e.institution_id = i.id
+                            INNER JOIN category c ON e.category_id = c.id WHERE r.student_id = '" . $_SESSION['u']['id'] . "'
+                            ORDER BY e.date DESC";
 
-                    $myRegistrations_rs = Database::search($q);
-                    $myRegistrations_num = $myRegistrations_rs->num_rows;
-                    ?>
+                        $myRegistrations_rs = Database::search($q);
+                        $myRegistrations_num = $myRegistrations_rs->num_rows;
+                        ?>
 
                         <div class="profile-section-head">
                             <h2 class="profile-section-title">Joined events</h2>
                             <span class="profile-count"><?php echo $myRegistrations_num; ?></span>
                         </div>
 
-                        <div class="joined-list">
-                            <div class="joined-item">
-                                <span class="joined-icon"><i class="bi bi-trophy"></i></span>
-                                <div>
-                                    <h3>Inter-Campus Football Finals</h3>
-                                    <p>17 Jun 2026 · Confirmed</p>
+                        <div class="joined-event-list">
+                            <?php
+                            for ($r = 0; $r < $myRegistrations_num; $r++) {
+                                $myRegistrations_data = $myRegistrations_rs->fetch_assoc();
+                            ?>
+                            <article class="joined-event-card">
+                                <div class="joined-event-banner">
+                                    <img src="uploads/events/<?php echo $myRegistrations_data['banner_img']; ?>" alt="" />
+                                    <span class="joined-event-badge"><?php echo $myRegistrations_data['category_name']; ?></span>
+                                    <div class="joined-event-date">
+                                        <?php
+                                        $date = date("d M", strtotime($myRegistrations_data['event_date']));
+                                        $day = date("d", strtotime($myRegistrations_data['event_date']));
+                                        $month = date("M", strtotime($myRegistrations_data['event_date']));
+                                        ?>
+                                        <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon joined-icon--blue"><i class="bi bi-laptop"></i></span>
-                                <div>
-                                    <h3>Web Development Workshop</h3>
-                                    <p>19 Jun 2026 · Pending</p>
+                                <div class="joined-event-body">
+                                    <h3 class="joined-event-title"><?php echo $myRegistrations_data['title']; ?></h3>
+                                    <p class="joined-event-meta">
+                                        <i class="bi bi-clock"></i> <?php echo $myRegistrations_data['start_time']; ?>
+                                        <span class="joined-event-dot">&middot;</span>
+                                        <i class="bi bi-geo-alt"></i> <?php echo $myRegistrations_data['location']; ?>
+                                    </p>
+                                    <div class="joined-event-footer">
+                                        <span class="joined-event-institute">
+                                            <i class="bi bi-building"></i> <?php echo $myRegistrations_data['institution_name']; ?>
+                                        </span>
+                                        <span class="joined-event-status">
+                                            <i class="bi bi-check-circle-fill"></i> Registered
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon joined-icon--amber"><i class="bi bi-briefcase"></i></span>
-                                <div>
-                                    <h3>CV and Interview Clinic</h3>
-                                    <p>27 Jun 2026 · Confirmed</p>
-                                </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon"><i class="bi bi-people"></i></span>
-                                <div>
-                                    <h3>Debate Society Open Night</h3>
-                                    <p>30 Jun 2026 · Registered</p>
-                                </div>
-                            </div>
+                            </article>
+                            <?php
+                            }
+
+                            ?>
+
                         </div>
+                        
                     </article>
 
                     <article class="profile-card logout-panel">
@@ -1016,9 +1126,9 @@ include "connection.php";
                 }
             });
 
-            editBtn.innerHTML = enabled
-                ? '<i class="bi bi-pencil-square"></i> Editing enabled'
-                : '<i class="bi bi-pencil-square"></i> Update details';
+            editBtn.innerHTML = enabled ?
+                '<i class="bi bi-pencil-square"></i> Editing enabled' :
+                '<i class="bi bi-pencil-square"></i> Update details';
             editBtn.disabled = enabled;
 
             if (enabled) {
@@ -1050,7 +1160,8 @@ include "connection.php";
             saveChanges();
         });
     </script>
-    
-    
+
+
 </body>
+
 </html>
