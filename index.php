@@ -379,16 +379,52 @@ include "connection.php";
                     <p class="section-subtitle">From workshops to championships — there is something for every student.</p>
                 </div>
 
-                <!-- <div class="events-filter">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">Academic</button>
-                    <button class="filter-btn">Sports</button>
-                    <button class="filter-btn">Cultural</button>
-                    <button class="filter-btn">Workshops</button>
-                    <button class="filter-btn">Competitions</button>
-                </div> -->
 
                 <div class="events-grid">
+
+                <?php
+                $q = "SELECT e.*, c.name AS category_name, i.name AS institution_name, s.name AS status_name
+                    FROM event e
+                    INNER JOIN category c ON e.category_id = c.id
+                    LEFT JOIN institution i ON e.institution_id = i.id
+                    INNER JOIN status s ON e.status = s.id
+                    ORDER BY e.id DESC";
+
+                $events_rs = Database::search($q);
+                $events_num = $events_rs->num_rows;
+
+                for ($e=0; $e < $events_num; $e++) { 
+                    $events_data = $events_rs->fetch_assoc();
+                    ?>
+                    <article class="event-card">
+                        <div class="event-img event-img--cultural">
+                            <i class="fa-solid fa-masks-theater event-img-icon"></i>
+                            <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
+                            <div class="event-date-pill">
+                                <b>25</b><span>Jun</span>
+                            </div>
+                        </div>
+                        <div class="event-body">
+                            <div class="event-meta-row">
+                                <span><i class="fa-regular fa-clock"></i> 6:00 PM – 10:00 PM</span>
+                                <span><i class="fa-solid fa-location-dot"></i> Open Air Theatre</span>
+                            </div>
+                            <h3 class="event-title">Cultural Festival Night</h3>
+                            <p class="event-desc">A vibrant celebration of diversity through performances, art, food, and music from students across all institutions.</p>
+                            <div class="event-footer">
+                                <div class="event-capacity">
+                                    <div class="capacity-bar">
+                                        <div class="capacity-fill" style="width:45%"></div>
+                                    </div>
+                                    <span class="capacity-label">225 / 500 spots</span>
+                                </div>
+                                <a href="#" class="btn btn-primary btn-sm">Register</a>
+                            </div>
+                        </div>
+                    </article>
+                    <?php
+                }
+                ?>
 
                     
                     <article class="event-card">
