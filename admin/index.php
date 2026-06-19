@@ -768,6 +768,7 @@ if (!isset($_SESSION['a'])) {
                 <div class="sub-links <?= in_array($page, ['events', 'add-event']) ? 'open' : '' ?>" id="events-sub">
                     <a class="sub-link" href="?page=events">All Events</a>
                     <a class="sub-link" href="?page=add-event">Add an Event</a>
+                    <a class="sub-link" href="?page=event-media">Event Gallery</a>
                 </div>
             </div>
             <div class="nav-section">
@@ -836,6 +837,7 @@ if (!isset($_SESSION['a'])) {
             'add-student',
             'events',
             'add-event',
+            'event-media',
             'registrations',
             'announcements',
             'add-announcement'
