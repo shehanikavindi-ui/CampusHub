@@ -1,17 +1,4 @@
-<!-- ============================================================
-     ADMIN — ADD EVENT PAGE
-     CampusHub Admin Dashboard
-     Uses only the :root tokens already defined in the global
-     stylesheet (root.css). Page-scoped under `.addevt-*` /
-     `.ae-*` to avoid any collision with existing classes.
-============================================================ -->
-
 <style>
-    /* ============================================================
-   ADD EVENT — PAGE STYLES
-   Built only from :root custom properties.
-============================================================ */
-
     .addevt-page {
         display: flex;
         flex-direction: column;
@@ -800,7 +787,7 @@
 
                     <div class="ae-field full">
                         <label class="ae-label" for="ae-description">Description <span class="ae-req">*</span></label>
-                        <textarea class="ae-textarea" id="ae-description" name="description"
+                        <textarea class="ae-textarea" id="ae-description" name="desc"
                             placeholder="Describe what the event is about, who it's for, and what students can expect..."
                             maxlength="600" required></textarea>
                         <div class="ae-char-count">0 / 600</div>
@@ -808,24 +795,38 @@
 
                     <div class="ae-field">
                         <label class="ae-label" for="ae-category">Category <span class="ae-req">*</span></label>
-                        <select class="ae-select" id="ae-category" name="category" required>
+                        <select class="ae-select" id="ae-category" name="cat_id" required>
                             <option value="" disabled selected>Select a category</option>
-                            <option value="academic">Academic</option>
-                            <option value="sports">Sports</option>
-                            <option value="culture">Culture</option>
-                            <option value="technology">Technology</option>
-                            <option value="social">Social</option>
+                            <?php
+                            $q = "SELECT * FROM category";
+                            $categories_rs = Database::search($q);
+
+                            while ($row = $categories_rs->fetch_assoc()) {
+                                $id = $row["id"];
+                                $name = $row["name"];
+
+                                echo "<option value=\"$id\">$name</option>";
+                            }
+                            ?>
                         </select>
                     </div>
 
                     <div class="ae-field">
                         <label class="ae-label" for="ae-institute">Institute <span class="ae-req">*</span></label>
-                        <select class="ae-select" id="ae-institute" name="institute_id" required>
+                        <select class="ae-select" id="ae-institute" name="ins_id" required>
+
                             <option value="" disabled selected>Select an institute</option>
-                            <option value="1">Colombo School of Engineering</option>
-                            <option value="2">National Institute of Business Studies</option>
-                            <option value="3">Westview College of Arts</option>
-                            <option value="4">Greenfield Polytechnic</option>
+                            <?php
+                            $q = "SELECT * FROM institution";
+                            $institutes_rs = Database::search($q);
+
+                            while ($row = $institutes_rs->fetch_assoc()) {
+                                $id = $row["id"];
+                                $name = $row["name"];
+
+                                echo "<option value=\"$id\">$name</option>";
+                            }
+                            ?>
                         </select>
                         <div class="ae-hint">The institute this event is organised under.</div>
                     </div>
@@ -847,7 +848,7 @@
                 </div>
 
                 <label class="ae-upload">
-                    <input type="file" id="ae-image" name="image" accept="image/png, image/jpeg, image/webp">
+                    <input type="file" id="ae-image" name="banner_img" accept="image/png, image/jpeg, image/webp">
 
                     <div class="ae-upload-icon"><i class="ti ti-cloud-upload"></i></div>
 
@@ -885,7 +886,7 @@
                         <label class="ae-label" for="ae-start">Start Time <span class="ae-req">*</span></label>
                         <div class="ae-input-icon-wrap">
                             <i class="ti ti-clock"></i>
-                            <input class="ae-input" type="time" id="ae-start" name="start_time" required>
+                            <input class="ae-input" type="time" id="ae-start" name="st_time" required>
                         </div>
                     </div>
 
@@ -916,7 +917,7 @@
                         <label class="ae-label" for="ae-location">Location <span class="ae-req">*</span></label>
                         <div class="ae-input-icon-wrap">
                             <i class="ti ti-map-pin"></i>
-                            <input class="ae-input" type="text" id="ae-location" name="location"
+                            <input class="ae-input" type="text" id="ae-location" name="loc"
                                 placeholder="e.g. Main Auditorium, Block C" required>
                         </div>
                     </div>
@@ -948,15 +949,15 @@
 
                 <div class="ae-status-group">
                     <div class="ae-status-pill">
-                        <input type="radio" name="status" id="ae-status-upcoming" value="upcoming" checked>
+                        <input type="radio" name="status" id="ae-status-upcoming" value=1 checked>
                         <label for="ae-status-upcoming">Upcoming</label>
                     </div>
                     <div class="ae-status-pill completed">
-                        <input type="radio" name="status" id="ae-status-completed" value="completed">
+                        <input type="radio" name="status" id="ae-status-completed" value=2>
                         <label for="ae-status-completed">Completed</label>
                     </div>
                     <div class="ae-status-pill cancelled">
-                        <input type="radio" name="status" id="ae-status-cancelled" value="cancelled">
+                        <input type="radio" name="status" id="ae-status-cancelled" value=3>
                         <label for="ae-status-cancelled">Cancelled</label>
                     </div>
                 </div>
@@ -976,8 +977,9 @@
         </form>
 
         <div class="ae-preview-sticky">
+            <div id="ae-error" style="color:red;margin:10px 0;"></div>
             <div class="add-btn-container">
-                <button class="ae-btn ae-btn-primary" type="submit" form="ae-event-form"><i class="ti ti-check"></i>
+                <button class="ae-btn ae-btn-primary" type="button"><i class="ti ti-check"></i>
                     Publish
                     Event</button>
             </div>
@@ -1022,6 +1024,7 @@
 </div>
 
 <script>
+
     (function () {
         var hasImage = false;
         var titleInput = document.getElementById('ae-title');
@@ -1152,6 +1155,7 @@
         });
 
         function clearImage() {
+            console.log("event handler loaded");
             hasImage = false;
 
             imageInput.value = '';
@@ -1166,6 +1170,30 @@
 
             update();
         }
+
+        document.getElementById("ae-event-form").addEventListener("submit", function (e) {
+            e.preventDefault();
+            console.log("event handler loaded");
+            var formData = new FormData(this);
+
+            fetch("../process/eventCreate.php", {
+                method: "POST",
+                body: formData
+            })
+                .then(res => res.text())
+                .then(data => {
+
+                    if (data.trim() === "success") {
+                        window.location.href = "?page=events";
+                    } else {
+                        document.getElementById("ae-error").textContent = data;
+                    }
+
+                })
+                .catch(err => {
+                    document.getElementById("ae-error").textContent = "Something went wrong!";
+                });
+        });
 
         document.getElementById('cut-button').addEventListener('click', clearImage);
         document.getElementById('discardBtn').addEventListener('click', clearImage);
