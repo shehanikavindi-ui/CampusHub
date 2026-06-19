@@ -26,6 +26,13 @@ include "connection.php";
         
         <section class="section section--soft" id="events">
             <div class="container">
+
+                <!-- toast -->
+                <div class="toast-msg" id="toast-msg" >
+                    <i id="toast-icon" class="bi bi-x-circle-fill"></i>
+                    <span id="toast-text" class="toast-text"></span>
+                </div>
+
                 <div class="section-header">
                     <span class="section-tag">Don't Miss Out</span>
                     <h2 class="section-title">Upcoming Events</h2>
@@ -46,6 +53,7 @@ include "connection.php";
                 $events_rs = Database::search($q);
                 $events_num = $events_rs->num_rows;
 
+                
                 for ($e=0; $e < $events_num; $e++) { 
                     $events_data = $events_rs->fetch_assoc();
                     ?>
@@ -54,6 +62,10 @@ include "connection.php";
                             <?php
                             if (!$events_data['banner_img']) {
                                 ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
+                            } else {
+                                ?>
+                                <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
+                                <?php
                             }
                             ?>
                             
@@ -81,7 +93,31 @@ include "connection.php";
                                     </div>
                                     <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
                                 </div>
-                                <a href="#" class="btn btn-primary btn-sm">Register</a>
+                                <?php
+                                if (!isset($_SESSION['u'])) {
+                                ?>
+                                    <button class="btn btn-primary btn-sm" 
+                                        onclick="gotoLogin();">
+                                        Register</button>
+                                <?php
+                                } else {
+                                    $register_rs = Database::search("SELECT * FROM `registration` WHERE `student_id`='".$_SESSION['u']['id']."' 
+                                        AND `event_id`='".$events_data['id']."' ");
+                                    $register_num = $register_rs->num_rows;
+                                    if ($register_num == 1) {
+                                    ?>
+                                        <button class="btn btn-secondary btn-sm"> Registered</button>
+                                    <?php
+                                    }else {
+                                    ?>
+                                        <button class="btn btn-primary btn-sm" 
+                                        onclick="registerEvent(<?php echo $events_data['id']; ?>);">
+                                        Register</button>
+                                    <?php
+                                    }
+                                }
+                                ?>
+                                
                             </div>
                         </div>
                     </article>
@@ -97,11 +133,6 @@ include "connection.php";
     <?php include "footer.php"; ?>
 
     <script>
-        /* --- Navbar scroll effect --- */
-        const header = document.getElementById('header');
-        window.addEventListener('scroll', () => {
-            header.classList.toggle('header--scrolled', window.scrollY > 60);
-        }, { passive: true });
 
         /* --- Mobile nav toggle --- */
         const navToggle = document.getElementById('navToggle');
@@ -141,7 +172,9 @@ include "connection.php";
             });
         }, { threshold: 0.1 });
         reveals.forEach(el => observer.observe(el));
+
     </script>
+    <script src="js/main.js"></script>
 
 </body>
 </html>
