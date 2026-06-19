@@ -1,18 +1,5 @@
-<!-- ============================================================
-     ADMIN — ALL EVENTS PAGE
-     CampusHub Admin Dashboard
-     Uses only the :root tokens already defined in the global
-     stylesheet (root.css). No classes from the dashboard's
-     existing component styles (.stat-card, .panel, .data-table
-     etc.) are reused — everything below is page-scoped under
-     the `.events-*` / `.evt-*` namespace to avoid collisions.
-============================================================ -->
 
 <style>
-    /* ============================================================
-   ALL EVENTS — PAGE STYLES
-   Built only from :root custom properties.
-============================================================ */
 
     .events-page {
         display: flex;
