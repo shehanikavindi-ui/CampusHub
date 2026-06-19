@@ -261,7 +261,7 @@ function adminLogin() {
             if (response == "success") {
                 showToast("Login successful! ✓", "success");
                 setTimeout(() => {
-                    window.location = "adminDashboard.php";
+                    window.location = "../admin/index.php";
                 }, 1500);
             } else if (response == "invalid") {
                 showToast("Invalid email or password!");
