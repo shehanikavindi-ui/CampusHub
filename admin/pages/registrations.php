@@ -657,6 +657,13 @@
             min-width: 0;
         }
     }
+
+    .rg-avatar-img {
+        width: 40px;
+        height: 40px;
+        border-radius: 20%;
+        object-fit: cover;
+    }
 </style>
 
 <div class="regs-page">
@@ -707,6 +714,7 @@
         s.fname,
         s.lname,
         s.email,
+        s.pfp AS pfp,
         e.title AS event_title,
         e.date AS event_date,
         e.location,
@@ -736,8 +744,13 @@
 
                             <td>
                                 <div class="rg-user-cell">
+
                                     <div class="rg-avatar">
-                                        <?= $initials ?>
+                                        <?php if (!empty($row["pfp"])) { ?>
+                                            <img src="../uploads/profiles/<?= $row["pfp"] ?>" class="rg-avatar-img" />
+                                        <?php } else { ?>
+                                            <?= $initials ?>
+                                        <?php } ?>
                                     </div>
 
                                     <div>
@@ -748,6 +761,7 @@
                                             <?= $email ?>
                                         </div>
                                     </div>
+
                                 </div>
                             </td>
 

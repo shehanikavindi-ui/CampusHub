@@ -723,7 +723,9 @@ include "../connection.php";
             'add-student',
             'events',
             'add-event',
-            'registrations'
+            'registrations',
+            'announcements',
+            'add-announcement'
         ];
 
         if (!in_array($page, $allowed_pages)) {
