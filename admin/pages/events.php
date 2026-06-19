@@ -570,41 +570,199 @@
             min-width: 0;
         }
     }
+
+    /* ───────────────────────── Modal Overlay ───────────────────────── */
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.55);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        padding: 20px;
+    }
+
+    /* ───────────────────────── Modal Card ───────────────────────── */
+    .modal-card {
+        width: 100%;
+        max-width: 620px;
+        background: white;
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-xl);
+        overflow: hidden;
+        animation: pop 220ms var(--ease);
+        padding-bottom: 10px;
+    }
+
+    @keyframes pop {
+        from {
+            transform: scale(0.96);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* ───────────────────────── Header ───────────────────────── */
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 18px 20px;
+        border-bottom: 1px solid var(--neutral-100);
+        background: var(--bg-soft);
+    }
+
+    .modal-title h2 {
+        font-size: 16px;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .modal-title p {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 2px;
+    }
+
+    .modal-close {
+        width: 34px;
+        height: 34px;
+        border-radius: var(--radius-md);
+        border: 1px solid var(--neutral-200);
+        background: white;
+        cursor: pointer;
+    }
+
+    /* ───────────────────────── Body ───────────────────────── */
+    .modal-body {
+        padding: 20px;
+    }
+
+    .profile-section {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 18px;
+    }
+
+    /* Avatar */
+    .modal-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        color: var(--primary-dark);
+        background: var(--teal-100);
+        font-size: 16px;
+        overflow: hidden;
+    }
+
+    .modal-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Profile Info */
+    .profile-info h3 {
+        margin: 0;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: var(--text-primary);
+    }
+
+    /* ───────────────────────── Details Grid ───────────────────────── */
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+    }
+
+    .detail-item {
+        padding: 10px 12px;
+        border: 1px solid var(--neutral-100);
+        border-radius: var(--radius-md);
+        background: var(--bg-soft);
+    }
+
+    .detail-item label {
+        font-size: 11px;
+        color: var(--text-muted);
+        display: block;
+        margin-bottom: 4px;
+    }
+
+    .detail-item span {
+        font-size: 13px;
+        color: var(--text-secondary);
+    }
+
+    /* ───────────────────────── Footer ───────────────────────── */
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        padding: 14px 20px;
+        border-top: 1px solid var(--neutral-100);
+        background: var(--bg-soft);
+    }
+
+    .event-modal {
+        max-width: 750px;
+        padding-bottom: 0;
+    }
+
+    /* BIG TOP BANNER */
+    .event-banner {
+        width: 100%;
+        height: 220px;
+        background: #e5e7eb;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+
+    /* dark overlay */
+    .event-banner-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top,
+                rgba(0, 0, 0, 0.65),
+                rgba(0, 0, 0, 0.1));
+        color: white;
+        padding: 18px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: 6px;
+    }
+
+    .event-banner-overlay h2 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .event-date {
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        opacity: 0.9;
+    }
 </style>
 
 <div class="events-page">
 
-    <div class="events-headrow">
-        <div class="evt-sum-card">
-            <div class="evt-sum-icon teal"><i class="ti ti-calendar-event"></i></div>
-            <div>
-                <div class="evt-sum-value">34</div>
-                <div class="evt-sum-label">Total Events</div>
-            </div>
-        </div>
-        <div class="evt-sum-card">
-            <div class="evt-sum-icon violet"><i class="ti ti-calendar-stats"></i></div>
-            <div>
-                <div class="evt-sum-value">19</div>
-                <div class="evt-sum-label">Open Now</div>
-            </div>
-        </div>
-        <div class="evt-sum-card">
-            <div class="evt-sum-icon amber"><i class="ti ti-clock-hour-4"></i></div>
-            <div>
-                <div class="evt-sum-value">7</div>
-                <div class="evt-sum-label">Filling Fast</div>
-            </div>
-        </div>
-        <div class="evt-sum-card">
-            <div class="evt-sum-icon red"><i class="ti ti-lock"></i></div>
-            <div>
-                <div class="evt-sum-value">5</div>
-                <div class="evt-sum-label">Full / Closed</div>
-            </div>
-        </div>
 
-    </div>
 
     <!-- ===== Toolbar ===== -->
     <div class="events-toolbar">
@@ -639,7 +797,7 @@
         </select>
 
 
-        <button class="evt-btn-primary" type="button" onclick="window.location.href='/campusHub/?page=add-event'">
+        <button class="evt-btn-primary" type="button" onclick="window.location.href='?page=add-event'">
             <i class="ti ti-plus"></i>
             New Event
         </button>
@@ -647,235 +805,106 @@
     </div>
 
     <div class="events-grid">
+        <?php
+        $q = "
+                SELECT 
+                    e.*,
+                    i.name AS institution_name,
+                    c.name AS category_name,
+                    s.name AS status_name,
+                    COUNT(r.student_id) AS reg_count
+                FROM event e
+                JOIN institution i ON e.institution_id = i.id
+                JOIN category c ON e.category_id = c.id
+                JOIN status s ON e.status = s.id
+                LEFT JOIN registration r ON r.event_id = e.id
+                GROUP BY e.id
+            ";
 
-        <!-- 1 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-academic">
-                <span class="evt-cat-tag">Academic</span>
-                <div class="evt-card-date-chip"><span class="evt-day">22</span><span class="evt-mon">Jun</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Orientation Day 2026</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 9:00 AM – 1:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Main Auditorium</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Student Affairs Office</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status open">Open</span>
-                    <span class="evt-reg-count"><b>145</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+        $events_rs = Database::search($q);
 
-        <!-- 2 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-tech">
-                <span class="evt-cat-tag">Technology</span>
-                <div class="evt-card-date-chip"><span class="evt-day">28</span><span class="evt-mon">Jun</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Coding Hackathon</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 8:00 AM – 8:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Innovation Lab, Block C</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Computing Society</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status open">Open</span>
-                    <span class="evt-reg-count"><b>88</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+        while ($row = $events_rs->fetch_assoc()) {
 
-        <!-- 3 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-sports">
-                <span class="evt-cat-tag">Sports</span>
-                <div class="evt-card-date-chip"><span class="evt-day">05</span><span class="evt-mon">Jul</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Sports Carnival</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 7:30 AM – 4:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> University Grounds</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Sports Council</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status filling">Filling</span>
-                    <span class="evt-reg-count"><b>210</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+            $id = $row["id"];
+            $title = $row["title"];
+            $img = $row["banner_img"];
+            $date = $row["date"];
+            $start = $row["start_time"];
+            $end = $row["end_time"];
+            $location = $row["location"];
+            $regCount = $row["reg_count"];
+            $institution = $row["institution_name"];
+            $category = $row["category_name"];
+            $status = $row["status_name"];
+            ?>
 
-        <!-- 4 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-culture">
-                <span class="evt-cat-tag">Culture</span>
-                <div class="evt-card-date-chip"><span class="evt-day">12</span><span class="evt-mon">Jul</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Art Workshop</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 2:00 PM – 5:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Fine Arts Studio</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Creative Arts Club</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status open">Open</span>
-                    <span class="evt-reg-count"><b>40</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+            <div class="evt-card">
+                <div class="evt-card-banner cat-academic"
+                    style="<?= $img ? "background-image:url('../uploads/events/$img'); background-size:cover; background-position:center;" : "" ?>">
 
-        <!-- 5 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-academic">
-                <span class="evt-cat-tag">Academic</span>
-                <div class="evt-card-date-chip"><span class="evt-day">19</span><span class="evt-mon">Jul</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Leadership Summit</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 9:00 AM – 3:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Conference Hall A</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Student Council</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status full">Full</span>
-                    <span class="evt-reg-count"><b>300</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+                    <span class="evt-cat-tag"><?= $category ?></span>
 
-        <!-- 6 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-social">
-                <span class="evt-cat-tag">Social</span>
-                <div class="evt-card-date-chip"><span class="evt-day">26</span><span class="evt-mon">Jul</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Freshers' Welcome Night</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 6:00 PM – 10:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Campus Pavilion</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Student Affairs Office</div>
+                    <div class="evt-card-date-chip">
+                        <span class="evt-day"><?= date("d", strtotime($date)) ?></span>
+                        <span class="evt-mon"><?= date("M", strtotime($date)) ?></span>
+                    </div>
                 </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status draft">Draft</span>
-                    <span class="evt-reg-count"><b>0</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
 
-        <!-- 7 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-tech">
-                <span class="evt-cat-tag">Technology</span>
-                <div class="evt-card-date-chip"><span class="evt-day">02</span><span class="evt-mon">Aug</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Robotics Showcase</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 10:00 AM – 2:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Engineering Block, Lab 3</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Robotics Society</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status open">Open</span>
-                    <span class="evt-reg-count"><b>56</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+                <div class="evt-card-body">
+                    <div class="evt-card-title"><?= $title ?></div>
 
-        <!-- 8 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-sports">
-                <span class="evt-cat-tag">Sports</span>
-                <div class="evt-card-date-chip"><span class="evt-day">09</span><span class="evt-mon">Aug</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Inter-Faculty Football Cup</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 3:00 PM – 6:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Main Sports Ground</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Sports Council</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status filling">Filling</span>
-                    <span class="evt-reg-count"><b>132</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+                    <div class="evt-card-meta">
+                        <div class="evt-meta-row">
+                            <i class="ti ti-clock"></i>
+                            <?= date("g:i A", strtotime($start)) ?> – <?= date("g:i A", strtotime($end)) ?>
+                        </div>
 
-        <!-- 9 -->
-        <div class="evt-card">
-            <div class="evt-card-banner cat-culture">
-                <span class="evt-cat-tag">Culture</span>
-                <div class="evt-card-date-chip"><span class="evt-day">14</span><span class="evt-mon">May</span></div>
-            </div>
-            <div class="evt-card-body">
-                <div class="evt-card-title">Photography Exhibition</div>
-                <div class="evt-card-meta">
-                    <div class="evt-meta-row"><i class="ti ti-clock"></i> 10:00 AM – 6:00 PM</div>
-                    <div class="evt-meta-row"><i class="ti ti-map-pin"></i> Library Gallery Wing</div>
-                    <div class="evt-meta-row"><i class="ti ti-user"></i> Photography Club</div>
-                </div>
-                <div class="evt-card-footer">
-                    <span class="evt-status closed">Closed</span>
-                    <span class="evt-reg-count"><b>97</b>&nbsp;registered</span>
-                </div>
-            </div>
-            <div class="evt-card-actions">
-                <button class="evt-icon-btn" type="button"><i class="ti ti-eye"></i> View</button>
-                <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
-            </div>
-        </div>
+                        <div class="evt-meta-row">
+                            <i class="ti ti-map-pin"></i>
+                            <?= $location ?>
+                        </div>
 
+                        <div class="evt-meta-row">
+                            <i class="ti ti-user"></i>
+                            <?= $institution ?>
+                        </div>
+                    </div>
+
+                    <div class="evt-card-footer">
+                        <span class="evt-status open"><?= $status ?></span>
+                        <span class="evt-reg-count"><b>
+                                <?= $regCount ?>
+                            </b>&nbsp;registered</span>
+                    </div>
+                </div>
+
+                <div class="evt-card-actions">
+                    <button class="evt-icon-btn" type="button" onclick='openEventModal(
+                        <?= json_encode($id) ?>,
+                        <?= json_encode($title) ?>,
+                        <?= json_encode($status) ?>,
+                        <?= json_encode($category) ?>,
+                        <?= json_encode($institution) ?>,
+                        <?= json_encode($start) ?>,
+                        <?= json_encode($end) ?>,
+                        <?= json_encode($location) ?>,
+                        <?= json_encode($regCount) ?>,
+                        <?= json_encode($img) ?>,
+                        <?= json_encode($date) ?>
+                    )'>
+                        <i class="ti ti-eye"></i> View
+                    </button>
+                    <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
+                    <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
+                </div>
+            </div>
+
+            <?php
+        }
+        ?>
     </div>
 
-    <!-- ===== Pagination ===== -->
+    <!-- ===== Pagination =====
     <div class="events-pagination">
         <div class="evt-page-info">Showing <b>1–9</b> of <b>34</b> events</div>
         <div class="evt-page-controls">
@@ -886,6 +915,93 @@
             <button class="evt-page-btn">4</button>
             <button class="evt-page-btn"><i class="ti ti-chevron-right"></i></button>
         </div>
+    </div> -->
+    <div id="eventModal" class="modal-overlay" onclick="closeEventModal(event)">
+        <div class="modal-card event-modal" onclick="event.stopPropagation()">
+
+            <!-- BIG BANNER -->
+            <div id="eventModalBanner" class="event-banner">
+                <div class="event-banner-overlay">
+                    <h2 id="eventModalTitle">--</h2>
+                    <span id="eventModalStatus" class="pill">--</span>
+
+                    <div class="event-date">
+                        <i class="ti ti-calendar"></i>
+                        <span id="eventModalDate">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="details-grid">
+
+                    <div class="detail-item">
+                        <label>Category</label>
+                        <span id="eventModalCategory">--</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Institution</label>
+                        <span id="eventModalInstitution">--</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Time</label>
+                        <span id="eventModalTime">--</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Location</label>
+                        <span id="eventModalLocation">--</span>
+                    </div>
+
+                    <div class="detail-item">
+                        <label>Registrations</label>
+                        <span id="eventModalRegs">--</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
     </div>
 
 </div>
+
+<script>
+    function openEventModal(id, title, status, category, institution, start, end, location, regCount, img, date) {
+
+        document.getElementById("eventModalTitle").textContent = title;
+        document.getElementById("eventModalStatus").textContent = status;
+        document.getElementById("eventModalCategory").textContent = category;
+        document.getElementById("eventModalInstitution").textContent = institution;
+        document.getElementById("eventModalLocation").textContent = location;
+        document.getElementById("eventModalRegs").textContent = regCount + " registered";
+
+        // time display (you only have ONE field in modal)
+        document.getElementById("eventModalTime").textContent =
+            `${start} - ${end}`;
+
+        // date (fix safe parsing)
+        const dateObj = new Date(date);
+        document.getElementById("eventModalDate").textContent =
+            isNaN(dateObj) ? date : dateObj.toDateString();
+
+        const banner = document.getElementById("eventModalBanner");
+
+        if (img) {
+            banner.style.background = `url('../uploads/events/${img}') center/cover no-repeat`;
+        } else {
+            banner.style.background = "#eee";
+        }
+
+        document.getElementById("eventModal").style.display = "flex";
+    }
+
+    function closeEventModal(e) {
+        if (e && e.target !== e.currentTarget) return;
+        document.getElementById("eventModal").style.display = "none";
+    }
+</script>

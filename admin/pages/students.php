@@ -771,7 +771,8 @@ $students = [];
 
 while ($row = $student_rs->fetch_assoc()) {
     $students[] = [
-        "id" => $row["studentID"],
+        "id" => $row["id"],
+        "st_id" => $row["studentID"],
         "name" => $row["fname"] . " " . $row["lname"],
         "institute" => $row["institution_name"],
         "faculty" => $row["faculty_name"],
@@ -820,7 +821,7 @@ while ($row = $student_rs->fetch_assoc()) {
                     <div class="av ${avColor(s.name)}">${initials(s.name)}</div>
                     <div>
                         <div class="student-name">${s.name}</div>
-                        <div class="student-id">${s.id}</div>
+                        <div class="student-id">${s.st_id}</div>
                     </div>
                 </div>
             </td>
@@ -845,8 +846,10 @@ while ($row = $student_rs->fetch_assoc()) {
                         <i class="ti ti-eye"></i>
                     </a>
                     
-                    <a class="icon-btn danger" href="?page=delete-student&id=${s.id}"
-                       title="Delete" onclick="return confirm('Delete ${s.name}?')">
+                    <a class="icon-btn danger"
+                    href="javascript:void(0)"
+                    onclick="deleteStudent('${s.id}', '${s.name}')"
+                    title="Delete">
                         <i class="ti ti-trash" aria-hidden="true"></i>
                     </a>
                 </div>
@@ -929,7 +932,7 @@ while ($row = $student_rs->fetch_assoc()) {
         const s = students.find(stu => stu.id === id);
         if (!s) return;
 
-        document.getElementById("modalStudentId").textContent = "ID: " + s.id;
+        document.getElementById("modalStudentId").textContent = "ID: " + s.st_id;
         document.getElementById("modalName").textContent = s.name;
 
         document.getElementById("modalDob").textContent = s.dob;
@@ -984,6 +987,25 @@ while ($row = $student_rs->fetch_assoc()) {
         dropdown.classList.remove('open');
 
         updateStatus(id, value);
+    }
+
+    function deleteStudent(id, name) {
+        if (!confirm(`Delete ${name}?`)) return;
+
+        fetch(`../process/studentDelete.php?id=${id}`)
+            .then(res => res.text())
+            .then(data => {
+
+                const index = students.findIndex(s => s.id === id);
+                if (index !== -1) students.splice(index, 1);
+
+                filtered = [...students];
+                renderTable();
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Delete failed");
+            });
     }
 
     renderTable();
