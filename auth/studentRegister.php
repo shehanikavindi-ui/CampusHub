@@ -278,7 +278,7 @@
                     </div>
 
                     <?php
-                        $yos_rs = Database::search("SELECT * FROM `yearofstudy`");
+                        $yos_rs = Database::search("SELECT * FROM `yearOfStudy`");
                         $yos_num = $yos_rs->num_rows;
                     ?>
                     <!-- Year of Study -->

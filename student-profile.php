@@ -256,13 +256,14 @@ include "connection.php";
         }
 
         .profile-img {
-            display: grid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 82px;
             height: 82px;
             flex: 0 0 auto;
             border-radius: 50%;
             overflow: hidden;
-            place-items: center;
         }
 
         .profile-img img {
@@ -270,6 +271,136 @@ include "connection.php";
             height: 100%;
             object-fit: cover;
         }
+
+        /*  */
+        .profile-pic-wrap {
+            position: relative;
+            width: 82px;
+            height: 82px;
+            flex: 0 0 auto;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .profile-pic-wrap .profile-avatar,
+        .profile-pic-wrap .profile-img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .profile-pic-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            transition: opacity var(--transition);
+        }
+
+        .profile-pic-wrap:hover .profile-pic-overlay {
+            opacity: 1;
+        }
+
+        .profile-pic-overlay i {
+            color: #FFFFFF;
+            font-size: 1.1rem;
+        }
+
+        .pic-modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .pic-modal-backdrop.is-open {
+            display: flex;
+        }
+
+        .pic-modal {
+            width: min(100%, 360px);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-2xl);
+            background: var(--bg-white);
+            box-shadow: var(--shadow-sm);
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .pic-modal h3 {
+            margin: 0 0 1rem;
+            font-size: var(--text-lg);
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .pic-modal-preview {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 1.1rem;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--teal-100), var(--violet-100));
+        }
+
+        .pic-modal-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .pic-modal-preview i {
+            font-size: 3rem;
+            color: var(--primary-dark);
+        }
+
+        .pic-modal-file-input {
+            display: none;
+        }
+
+        .pic-modal-change-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            width: 100%;
+            min-height: 42px;
+            margin-bottom: 1rem;
+            border: 1.5px dashed var(--neutral-200);
+            border-radius: var(--radius-lg);
+            background: var(--bg-soft);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font: inherit;
+            font-size: var(--text-sm);
+            font-weight: 700;
+        }
+
+        .pic-modal-change-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary-dark);
+        }
+
+        .pic-modal-actions {
+            display: flex;
+            gap: 0.65rem;
+        }
+
+        .pic-modal-actions .profile-btn {
+            flex: 1;
+        }
+        /*  */
 
         .profile-summary h2 {
             margin: 0;
@@ -571,6 +702,8 @@ include "connection.php";
         }
     </style>
 </head>
+
+
 <body>
     
     <div class="profile-page"><br><br>
@@ -590,6 +723,7 @@ include "connection.php";
             <section class="profile-layout mt-4">
                 <article class="profile-card profile-card-main" id="profileCard">
                     <div class="profile-card-inner">
+    
 
                     <?php
                     $q = "SELECT s.*, i.name AS institution_name, g.name AS gender_name,  c.name AS course_name, f.name AS faculty_name, 
@@ -602,26 +736,27 @@ include "connection.php";
 
                     $years_rs = Database::search("SELECT id, name FROM yearOfStudy ORDER BY id");
 
+                    
+
                     ?>
                         
                         <div class="profile-summary">
 
-                            <?php
-                            if ($student_data['pfp'] == null) {
-                                ?>
-                                <div class="profile-avatar" aria-hidden="true">
-                                    <i class="bi bi-person"></i>
+                            <div class="profile-pic-wrap" id="profilePicTrigger">
+                                <?php if ($student_data['pfp'] == null): ?>
+                                    <div class="profile-avatar" aria-hidden="true">
+                                        <i class="bi bi-person"></i>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="profile-img" aria-hidden="true">
+                                        <img src="uploads/profiles/<?php echo htmlspecialchars($student_data['pfp']); ?>" />
+                                    </div>
+                                <?php endif; ?>
+
+                                <div class="profile-pic-overlay">
+                                    <i class="bi bi-pencil-fill"></i>
                                 </div>
-                                <?php
-                            } else {
-                                ?>
-                                <div class="profile-img" aria-hidden="true">
-                                    <img src="uploads/profiles/<?php echo $student_data['pfp']; ?>" />
-                                </div>
-                                <?php
-                            }
-                            
-                            ?>
+                            </div>
                             
 
                             <div>
@@ -715,36 +850,6 @@ include "connection.php";
                 </article>
 
                 <aside class="profile-side-stack">
-                    <article class="profile-card profile-section">
-                        <div class="profile-section-head">
-                            <h2 class="profile-section-title">Joined clubs</h2>
-                            <span class="profile-count">3</span>
-                        </div>
-
-                        <div class="joined-list">
-                            <div class="joined-item">
-                                <span class="joined-icon"><i class="bi bi-camera"></i></span>
-                                <div>
-                                    <h3>Photography Club</h3>
-                                    <p>Member · Joined Jan 2026</p>
-                                </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon joined-icon--blue"><i class="bi bi-code-slash"></i></span>
-                                <div>
-                                    <h3>ICT Society</h3>
-                                    <p>Volunteer · Joined Mar 2026</p>
-                                </div>
-                            </div>
-                            <div class="joined-item">
-                                <span class="joined-icon joined-icon--amber"><i class="bi bi-chat-quote"></i></span>
-                                <div>
-                                    <h3>Debate Society</h3>
-                                    <p>Member · Joined Apr 2026</p>
-                                </div>
-                            </div>
-                        </div>
-                    </article>
 
                     <article class="profile-card profile-section">
                         <div class="profile-section-head">
@@ -796,8 +901,78 @@ include "connection.php";
         </main>
     </div>
 
+    <div class="pic-modal-backdrop" id="picModalBackdrop">
+        <div class="pic-modal">
+            <h3>Update profile picture</h3>
+
+            <div class="pic-modal-preview" id="picModalPreview">
+                <?php if ($student_data['pfp']): ?>
+                    <img src="uploads/profiles/<?php echo htmlspecialchars($student_data['pfp']); ?>" id="picModalImg" />
+                <?php else: ?>
+                    <i class="bi bi-person" id="picModalIcon"></i>
+                <?php endif; ?>
+            </div>
+
+            <label class="pic-modal-change-btn">
+                <i class="bi bi-upload"></i> Change profile picture
+                <input type="file" accept="image/*" class="pic-modal-file-input" id="picModalFileInput">
+            </label>
+
+            <div class="pic-modal-actions">
+                <button type="button" class="profile-btn profile-btn-secondary" id="picModalCancelBtn">Cancel</button>
+                <button type="button" class="profile-btn profile-btn-primary" id="picModalSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/student-profile.js"></script>
     <script>
+        const picTrigger = document.getElementById("profilePicTrigger");
+        const picModalBackdrop = document.getElementById("picModalBackdrop");
+        const picModalCancelBtn = document.getElementById("picModalCancelBtn");
+        const picModalSaveBtn = document.getElementById("picModalSaveBtn");
+        const picModalFileInput = document.getElementById("picModalFileInput");
+        const picModalPreview = document.getElementById("picModalPreview");
+
+        let selectedFile = null;
+
+        picTrigger.addEventListener("click", () => {
+            picModalBackdrop.classList.add("is-open");
+        });
+
+        picModalCancelBtn.addEventListener("click", closePicModal);
+
+        picModalBackdrop.addEventListener("click", (e) => {
+            if (e.target === picModalBackdrop) closePicModal();
+        });
+
+        function closePicModal() {
+            picModalBackdrop.classList.remove("is-open");
+            selectedFile = null;
+            picModalFileInput.value = "";
+        }
+
+        picModalFileInput.addEventListener("change", () => {
+            const file = picModalFileInput.files[0];
+            if (!file) return;
+            selectedFile = file;
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                picModalPreview.innerHTML = `<img src="${e.target.result}" id="picModalImg">`;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        picModalSaveBtn.addEventListener("click", () => {
+            if (!selectedFile) {
+                closePicModal();
+                return;
+            }
+
+            saveProfilePfp();
+        });
+
         const profileCard = document.getElementById("profileCard");
         const profileForm = document.getElementById("profileForm");
         const editBtn = document.getElementById("editProfileBtn");

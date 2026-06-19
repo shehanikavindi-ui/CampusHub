@@ -55,3 +55,34 @@ function saveChanges() {
     request.open("POST", "/CampusHub/process/updateProfile.php", true);
     request.send(form);
 }
+
+function saveProfilePfp() {
+
+    var fileInput = document.getElementById("picModalFileInput");
+
+    if (fileInput.files.length == 0) {
+        return;
+    }
+
+    var form = new FormData();
+    form.append("pfp", fileInput.files[0]);
+
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        if (request.status == 200 && request.readyState == 4) {
+            var response = request.responseText;
+            if (response == "success") {
+                showToast("Profile picture updated successfully", "success");
+                setTimeout(function() {
+                    window.location.reload();
+                }, 1200);
+            } else {
+                showToast(response, "error");
+            }
+        }
+    }
+
+    request.open("POST", "/CampusHub/process/updatePfp.php", true);
+    request.send(form);
+
+}

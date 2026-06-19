@@ -50,6 +50,24 @@ function studentRegister() {
         return;
     }
 
+    if (!/^(0\d{9}|\+94\d{9})$/.test(phone.value)) {
+        showToast("⚠ Please enter a valid mobile number!");
+        phone.focus();
+        return;
+    }
+
+    if (password.value.length !== 8) {
+        showToast("⚠ Password must be exactly 8 characters long!");
+        password.focus();
+        return;
+    }
+
+    if (password.value !== confirmPassword.value) {
+        showToast("⚠ Passwords do not match!");
+        confirmPassword.focus();
+        return;
+    }
+
     var form = new FormData();
     form.append("fn", firstname.value);
     form.append("ln", lastname.value);
