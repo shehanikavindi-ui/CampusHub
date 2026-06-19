@@ -12,11 +12,11 @@ $id = $_GET["id"];
 
 if (!is_numeric($id)) {
     http_response_code(400);
-    echo "Invalid student id";
+    echo "Invalid event id";
     exit;
 }
 
-$query = "DELETE FROM student WHERE id = '$id'";
+$query = "DELETE FROM event WHERE id = '$id'";
 Database::iud($query);
 
 echo "success";

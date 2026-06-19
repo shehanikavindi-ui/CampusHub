@@ -127,8 +127,6 @@
         margin-top: 2px;
     }
 
-    /* ---------- Toolbar: search + filters ---------- */
-
     .events-toolbar {
         background: var(--bg-white);
         border: 1px solid var(--neutral-200);
@@ -137,6 +135,7 @@
         padding: 14px 16px;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         gap: 12px;
         flex-wrap: wrap;
     }
@@ -144,7 +143,7 @@
     .evt-search {
         position: relative;
         flex: 1;
-        min-width: 220px;
+        max-width: 50%;
     }
 
     .evt-search input {
@@ -609,6 +608,11 @@
         font-size: 16px;
         color: var(--text-primary);
         margin: 0;
+        font-weight: 600;
+    }
+
+    .modal-title h2 span {
+        color: var(--primary-dark);
     }
 
     .modal-title p {
@@ -624,11 +628,37 @@
         border: 1px solid var(--neutral-200);
         background: white;
         cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: all var(--transition);
+    }
+
+    .modal-close:hover {
+        background: var(--neutral-100);
+        border-color: var(--neutral-300);
+    }
+
+    .modal-close i {
+        font-size: 17px;
+        color: var(--text-secondary);
     }
 
     /* ───────────────────────── Body ───────────────────────── */
     .modal-body {
         padding: 20px;
+        max-height: 65vh;
+        overflow-y: auto;
+    }
+
+    .modal-body::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+        background: var(--neutral-300);
+        border-radius: 4px;
     }
 
     .profile-section {
@@ -651,6 +681,7 @@
         background: var(--teal-100);
         font-size: 16px;
         overflow: hidden;
+        flex-shrink: 0;
     }
 
     .modal-avatar img {
@@ -667,7 +698,146 @@
         color: var(--text-primary);
     }
 
-    /* ───────────────────────── Details Grid ───────────────────────── */
+    /* ───────────────────────── Form Field Grid (used in edit/add modals) ───────────────────────── */
+    .field-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .field-full {
+        grid-column: 1 / -1;
+    }
+
+    .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .field label {
+        font-size: 12px;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    .field input[type="text"],
+    .field input[type="date"],
+    .field input[type="time"],
+    .field input[type="number"],
+    .field input[type="email"],
+    .field select {
+        height: 38px;
+        border: 1px solid var(--neutral-200);
+        border-radius: var(--radius-md);
+        padding: 0 12px;
+        font-size: 13.5px;
+        color: var(--text-primary);
+        background: var(--bg-white);
+        outline: none;
+        font-family: var(--font-body);
+        transition: border-color var(--transition), box-shadow var(--transition);
+        width: 100%;
+    }
+
+    .field input:focus,
+    .field select:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.12);
+    }
+
+    .field input::placeholder {
+        color: var(--text-muted);
+    }
+
+    /* Custom select chevron (since native arrows look inconsistent) */
+    .field select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+        padding-right: 32px;
+        cursor: pointer;
+    }
+
+    /* Inputs with a leading icon (date, time, location, etc.) */
+    .icon-field {
+        position: relative;
+    }
+
+    .icon-field i {
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 15px;
+        color: var(--text-muted);
+        pointer-events: none;
+    }
+
+    .icon-field input {
+        padding-left: 33px !important;
+    }
+
+    /* ───────────────────────── Image Upload Zone (with preview) ───────────────────────── */
+    .upload-zone {
+        border: 1.5px dashed var(--neutral-300);
+        border-radius: var(--radius-md);
+        padding: 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: all var(--transition);
+        background: var(--bg-soft);
+    }
+
+    .upload-zone:hover {
+        border-color: var(--primary);
+        background: var(--teal-50);
+    }
+
+    .upload-zone.has-image {
+        border-style: solid;
+        border-color: var(--neutral-200);
+    }
+
+    .upload-preview {
+        width: 54px;
+        height: 54px;
+        border-radius: var(--radius-md);
+        background: var(--neutral-200);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        overflow: hidden;
+    }
+
+    .upload-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .upload-preview i {
+        font-size: 22px;
+        color: var(--text-muted);
+    }
+
+    .upload-text p {
+        font-size: 13px;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+
+    .upload-text span {
+        font-size: 11.5px;
+        color: var(--text-muted);
+    }
+
+    /* ───────────────────────── Details Grid (read-only profile modal) ───────────────────────── */
     .details-grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -693,6 +863,29 @@
         color: var(--text-secondary);
     }
 
+    /* ───────────────────────── Inline error box ───────────────────────── */
+    .err-box {
+        margin: 0 20px 14px;
+        font-size: 12.5px;
+        color: #B91C1C;
+        background: #FEF2F2;
+        border: 1px solid #FECACA;
+        border-radius: var(--radius-md);
+        padding: 8px 12px;
+        display: none;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .err-box.show {
+        display: flex;
+    }
+
+    .err-box i {
+        font-size: 15px;
+        flex-shrink: 0;
+    }
+
     /* ───────────────────────── Footer ───────────────────────── */
     .modal-footer {
         display: flex;
@@ -703,6 +896,49 @@
         background: var(--bg-soft);
     }
 
+    .btn-ghost {
+        height: 38px;
+        padding: 0 16px;
+        border: 1px solid var(--neutral-200);
+        border-radius: var(--radius-md);
+        background: white;
+        font-size: 13.5px;
+        color: var(--text-secondary);
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: all var(--transition);
+    }
+
+    .btn-ghost:hover {
+        background: var(--neutral-100);
+    }
+
+    .evt-btn-primary {
+        height: 38px;
+        padding: 0 18px;
+        border: none;
+        border-radius: var(--radius-md);
+        background: var(--primary);
+        color: white;
+        font-size: 13.5px;
+        font-weight: 500;
+        cursor: pointer;
+        font-family: var(--font-body);
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        transition: background var(--transition);
+    }
+
+    .evt-btn-primary:hover {
+        background: var(--primary-hover);
+    }
+
+    .evt-btn-primary i {
+        font-size: 16px;
+    }
+
+    /* ───────────────────────── Event-specific modal ───────────────────────── */
     .event-modal {
         max-width: 750px;
         padding-bottom: 0;
@@ -755,33 +991,8 @@
     <div class="events-toolbar">
         <div class="evt-search">
             <i class="ti ti-search"></i>
-            <input type="text" placeholder="Search events by name or organiser...">
+            <input id="eventSearch" type="text" placeholder="Search events by name or organiser...">
         </div>
-
-        <select class="evt-filter-select">
-            <option>All Categories</option>
-            <option>Academic</option>
-            <option>Sports</option>
-            <option>Culture</option>
-            <option>Technology</option>
-            <option>Social</option>
-        </select>
-
-        <select class="evt-filter-select">
-            <option>All Statuses</option>
-            <option>Open</option>
-            <option>Filling</option>
-            <option>Full</option>
-            <option>Draft</option>
-            <option>Closed</option>
-        </select>
-
-        <select class="evt-filter-select">
-            <option>Sort: Date (Soonest)</option>
-            <option>Sort: Date (Latest)</option>
-            <option>Sort: Most Registrations</option>
-            <option>Sort: Name (A–Z)</option>
-        </select>
 
 
         <button class="evt-btn-primary" type="button" onclick="window.location.href='?page=add-event'">
@@ -806,6 +1017,7 @@
                 JOIN status s ON e.status = s.id
                 LEFT JOIN registration r ON r.event_id = e.id
                 GROUP BY e.id
+                ORDER BY e.date DESC
             ";
 
         $events_rs = Database::search($q);
@@ -825,7 +1037,8 @@
             $status = $row["status_name"];
             ?>
 
-            <div class="evt-card">
+            <div class="evt-card" data-title="<?= strtolower($title) ?>" data-institution="<?= strtolower($institution) ?>"
+                data-location="<?= strtolower($location) ?>">
                 <div class="evt-card-banner cat-academic"
                     style="<?= $img ? "background-image:url('../uploads/events/$img'); background-size:cover; background-position:center;" : "" ?>">
 
@@ -881,8 +1094,22 @@
                     )'>
                         <i class="ti ti-eye"></i> View
                     </button>
-                    <button class="evt-icon-btn" type="button"><i class="ti ti-edit"></i> Edit</button>
-                    <button class="evt-icon-btn danger" type="button"><i class="ti ti-trash"></i></button>
+                    <button class="evt-icon-btn" type="button" onclick='openEditModal(
+                        <?= json_encode($id) ?>,
+                        <?= json_encode($title) ?>,
+                        <?= json_encode($date) ?>,
+                        <?= json_encode($start) ?>,
+                        <?= json_encode($end) ?>,
+                        <?= json_encode($location) ?>,
+                        <?= json_encode($row["category_id"]) ?>,
+                        <?= json_encode($row["institution_id"]) ?>,
+                        <?= json_encode($row["status"]) ?>
+                    )'>
+                        <i class="ti ti-edit"></i> Edit
+                    </button>
+                    <button class="evt-icon-btn danger" type="button" onclick="deleteEvent(<?= $id ?>)">
+                        <i class="ti ti-trash"></i>
+                    </button>
                 </div>
             </div>
 
@@ -891,18 +1118,6 @@
         ?>
     </div>
 
-    <!-- ===== Pagination =====
-    <div class="events-pagination">
-        <div class="evt-page-info">Showing <b>1–9</b> of <b>34</b> events</div>
-        <div class="evt-page-controls">
-            <button class="evt-page-btn" disabled><i class="ti ti-chevron-left"></i></button>
-            <button class="evt-page-btn active">1</button>
-            <button class="evt-page-btn">2</button>
-            <button class="evt-page-btn">3</button>
-            <button class="evt-page-btn">4</button>
-            <button class="evt-page-btn"><i class="ti ti-chevron-right"></i></button>
-        </div>
-    </div> -->
     <div id="eventModal" class="modal-overlay" onclick="closeEventModal(event)">
         <div class="modal-card event-modal" onclick="event.stopPropagation()">
 
@@ -955,9 +1170,158 @@
         </div>
     </div>
 
+    <div id="eventEditModal" class="modal-overlay" onclick="closeEditModal(event)">
+        <div class="modal-card event-modal" onclick="event.stopPropagation()">
+
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Edit event: <span id="title"></span></h2>
+                </div>
+                <button class="modal-close" onclick="closeEditModal()" aria-label="Close">
+                    <i class="ti ti-x" aria-hidden="true"></i>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <input type="hidden" id="edit_id">
+
+                <div class="field-grid">
+
+                    <div class="field field-full">
+                        <label>Title</label>
+                        <input id="edit_title" type="text" placeholder="e.g. Coding Hackathon">
+                    </div>
+
+                    <div class="field">
+                        <label>Date</label>
+                        <div class="icon-field">
+                            <i class="ti ti-calendar" aria-hidden="true"></i>
+                            <input id="edit_date" type="date">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>Location</label>
+                        <div class="icon-field">
+                            <i class="ti ti-map-pin" aria-hidden="true"></i>
+                            <input id="edit_location" type="text" placeholder="e.g. Main Auditorium">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>Start time</label>
+                        <div class="icon-field">
+                            <i class="ti ti-clock" aria-hidden="true"></i>
+                            <input id="edit_start" type="time">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>End time</label>
+                        <div class="icon-field">
+                            <i class="ti ti-clock" aria-hidden="true"></i>
+                            <input id="edit_end" type="time">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label>Category</label>
+                        <select id="edit_category">
+                            <?php
+                            $q = "SELECT * FROM category";
+                            $categories_rs = Database::search($q);
+                            while ($row = $categories_rs->fetch_assoc()) {
+                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Institution</label>
+                        <select id="edit_institution">
+                            <?php
+                            $q = "SELECT * FROM institution";
+                            $institutes_rs = Database::search($q);
+                            while ($row = $institutes_rs->fetch_assoc()) {
+                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="field">
+                        <label>Status</label>
+                        <select id="edit_status">
+                            <?php
+                            $q = "SELECT * FROM status";
+                            $status_rs = Database::search($q);
+                            while ($row = $status_rs->fetch_assoc()) {
+                                echo "<option value='{$row['id']}'>{$row['name']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="field field-full">
+                        <label>Banner image</label>
+                        <div class="upload-zone" id="uploadZone"
+                            onclick="document.getElementById('edit_image').click()">
+                            <div class="upload-preview" id="uploadPreview">
+                                <i class="ti ti-photo" aria-hidden="true"></i>
+                            </div>
+                            <div class="upload-text">
+                                <p id="uploadFileName">Choose a banner image</p>
+                                <span>JPG or PNG, recommended 1200&times;400px</span>
+                            </div>
+                            <input id="edit_image" type="file" accept="image/*" style="display:none"
+                                onchange="previewBannerImage(this)">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="err-box" id="edit_error">
+                <i class="ti ti-alert-circle" aria-hidden="true"></i>
+                <span id="edit_error_text"></span>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn-ghost" onclick="closeEditModal()">Cancel</button>
+                <button class="evt-btn-primary" onclick="updateEvent()">
+                    Update event
+                </button>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <script>
+    const searchInput = document.getElementById("eventSearch");
+    const cards = document.querySelectorAll(".evt-card");
+
+    searchInput.addEventListener("input", function () {
+        const q = this.value.toLowerCase().trim();
+
+        cards.forEach(card => {
+            const title = card.dataset.title;
+            const institution = card.dataset.institution;
+            const location = card.dataset.location;
+
+            const match =
+                title.includes(q) ||
+                institution.includes(q) ||
+                location.includes(q);
+
+            card.style.display = match ? "block" : "none";
+        });
+    });
+
     function openEventModal(id, title, status, category, institution, start, end, location, regCount, img, date) {
 
         document.getElementById("eventModalTitle").textContent = title;
@@ -967,11 +1331,9 @@
         document.getElementById("eventModalLocation").textContent = location;
         document.getElementById("eventModalRegs").textContent = regCount + " registered";
 
-        // time display (you only have ONE field in modal)
         document.getElementById("eventModalTime").textContent =
             `${start} - ${end}`;
 
-        // date (fix safe parsing)
         const dateObj = new Date(date);
         document.getElementById("eventModalDate").textContent =
             isNaN(dateObj) ? date : dateObj.toDateString();
@@ -990,5 +1352,117 @@
     function closeEventModal(e) {
         if (e && e.target !== e.currentTarget) return;
         document.getElementById("eventModal").style.display = "none";
+    }
+
+    function openEditModal(id, title, date, start, end, location, categoryId, institutionId, status) {
+
+        document.getElementById("edit_id").value = id;
+        document.getElementById("title").textContent = title;
+        document.getElementById("edit_title").value = title;
+        document.getElementById("edit_date").value = date;
+        document.getElementById("edit_start").value = start;
+        document.getElementById("edit_end").value = end;
+        document.getElementById("edit_location").value = location;
+
+        document.getElementById("edit_category").value = categoryId;
+        document.getElementById("edit_institution").value = institutionId;
+        document.getElementById("edit_status").value = status;
+
+        document.getElementById("eventEditModal").style.display = "flex";
+    }
+
+    function previewBannerImage(input) {
+        if (!input.files || !input.files[0]) return;
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('uploadPreview').innerHTML = `<img src="${e.target.result}" alt="Banner preview">`;
+            document.getElementById('uploadFileName').textContent = file.name;
+            document.getElementById('uploadZone').classList.add('has-image');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function showEditError(message) {
+        const box = document.getElementById('edit_error');
+        document.getElementById('edit_error_text').textContent = message;
+        box.classList.add('show');
+    }
+
+    function hideEditError() {
+        document.getElementById('edit_error').classList.remove('show');
+    }
+
+    function resetUploadZone() {
+        document.getElementById('uploadPreview').innerHTML = '<i class="ti ti-photo" aria-hidden="true"></i>';
+        document.getElementById('uploadFileName').textContent = 'Choose a banner image';
+        document.getElementById('uploadZone').classList.remove('has-image');
+        document.getElementById('edit_image').value = '';
+    }
+
+    function closeEditModal(event) {
+        if (event && event.target !== event.currentTarget) return;
+        document.getElementById('eventEditModal').style.display = 'none';
+        hideEditError();
+        resetUploadZone();
+    }
+
+    function deleteEvent(id) {
+        console.log('deleting');
+
+        if (!confirm("Delete this event?")) return;
+
+        fetch(`../process/eventDelete.php?id=${id}`)
+            .then(res => res.text())
+            .then(res => {
+
+                if (res.trim() === "success") {
+                    location.reload();
+                } else {
+                    alert(res);
+                }
+
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Something went wrong while deleting");
+            });
+    }
+
+    function updateEvent() {
+
+        const formData = new FormData();
+
+        formData.append("id", document.getElementById("edit_id").value);
+        formData.append("title", document.getElementById("edit_title").value);
+        formData.append("date", document.getElementById("edit_date").value);
+        formData.append("start", document.getElementById("edit_start").value);
+        formData.append("end", document.getElementById("edit_end").value);
+        formData.append("location", document.getElementById("edit_location").value);
+        formData.append("category", document.getElementById("edit_category").value);
+        formData.append("institution", document.getElementById("edit_institution").value);
+        formData.append("status", document.getElementById("edit_status").value);
+
+        const file = document.getElementById("edit_image").files[0];
+        if (file) formData.append("image", file);
+
+        fetch("../process/eventUpdate.php", {
+            method: "POST",
+            body: formData
+        })
+            .then(res => res.text())
+            .then(res => {
+
+                if (res.trim() === "success") {
+                    location.reload();
+                } else {
+                    document.getElementById("edit_error").textContent = res;
+                }
+
+            })
+            .catch(err => {
+                document.getElementById("edit_error").textContent = "Update failed";
+                console.error(err);
+            });
     }
 </script>
