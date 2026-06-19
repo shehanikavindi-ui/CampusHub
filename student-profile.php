@@ -999,22 +999,7 @@ include "connection.php";
                 return;
             }
 
-            const formData = new FormData();
-            formData.append("profile_picture", selectedFile);
-
-            fetch("update_profile_picture.php", {
-                method: "POST",
-                body: formData
-            })
-                .then((res) => res.json())
-                .then((data) => {
-                    if (data.success) {
-                        location.reload();
-                    } else {
-                        alert(data.message || "Upload failed.");
-                    }
-                })
-                .catch(() => alert("Something went wrong."));
+            saveProfilePfp();
         });
 
         const profileCard = document.getElementById("profileCard");

@@ -330,7 +330,7 @@ em { font-style: italic; }
     font-size: var(--text-xs);
     font-family: var(--font-body);
     letter-spacing: 0.05em;
-    z-index: 999;
+    z-index: 9999;
     opacity: 0;
     transform: translateY(-8px);
     transition: opacity var(--transition), transform var(--transition);
