@@ -6,7 +6,7 @@
         </a>
         <ul class="nav-links" id="navLinks">
             <li><a href="index.php" class="nav-link active">Home</a></li>
-            <li><a href="#events" class="nav-link">Events</a></li>
+            <li><a href="events.php" class="nav-link">Events</a></li>
             <!-- <li><a href="#clubs" class="nav-link">Clubs</a></li> -->
             <li><a href="#gallery" class="nav-link">Gallery</a></li>
             <li><a href="announcements.php" class="nav-link">Announcements</a></li>
