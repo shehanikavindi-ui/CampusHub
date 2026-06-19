@@ -92,6 +92,10 @@
         transform: translateY(-2px);
     }
 
+    .ann-card.hide {
+        display: none;
+    }
+
     .ann-top {
         display: flex;
         align-items: center;
@@ -693,7 +697,34 @@
 </div>
 
 <script>
+    const searchInput = document.getElementById("annSearchInput");
+    const clearBtn = document.getElementById("annSearchClear");
+    const cards = document.querySelectorAll(".ann-card");
 
+    function filterAnnouncements() {
+        const q = searchInput.value.toLowerCase().trim();
+
+        cards.forEach(card => {
+            const title = card.querySelector(".ann-title").textContent.toLowerCase();
+            const desc = card.querySelector(".ann-desc").textContent.toLowerCase();
+
+            const match = title.includes(q) || desc.includes(q);
+
+            if (match) {
+                card.classList.remove("hide");
+            } else {
+                card.classList.add("hide");
+            }
+        });
+    }
+
+    searchInput.addEventListener("input", filterAnnouncements);
+
+    clearBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        filterAnnouncements();
+        searchInput.focus();
+    });
 
     function openModal(overlayId) {
         var overlay = document.getElementById(overlayId);
