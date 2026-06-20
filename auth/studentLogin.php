@@ -164,7 +164,7 @@
                 <div class="form-check-group form-check-group--remember mt-3">
                     <input type="checkbox" class="form-checkbox" id="rememberMe" name="rememberMe">
                     <label class="form-check-label" for="rememberMe">
-                        Keep me signed in for 30 days
+                        Remember me for 30 days
                     </label>
                 </div>
 
