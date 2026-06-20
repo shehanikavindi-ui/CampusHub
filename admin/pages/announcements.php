@@ -733,6 +733,7 @@
     }
 
     function closeModal(overlayId) {
+        console.log("closing", overlayId);
         var overlay = document.getElementById(overlayId);
         overlay.classList.remove('show');
         document.body.style.overflow = '';
