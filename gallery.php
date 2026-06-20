@@ -162,7 +162,7 @@ include "connection.php";
       border-radius: var(--radius-xl);
       box-shadow: var(--shadow-xl);
       width: 100%;
-      max-width: 720px;
+      max-width: 1000px;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
@@ -230,7 +230,7 @@ include "connection.php";
       overflow-y: auto;
       padding: 20px 28px 28px;
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 12px;
     }
 

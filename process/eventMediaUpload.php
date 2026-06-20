@@ -26,7 +26,7 @@ if (!is_dir($upload_dir)) {
 }
 
 $allowed_types = ['image/png', 'image/jpeg', 'image/webp'];
-$max_size = 5 * 1024 * 1024; // 5MB
+$max_size = 10 * 1024 * 1024;
 $max_files = 10;
 
 $names     = $_FILES['media_img']['name'];
@@ -55,7 +55,7 @@ for ($i = 0; $i < $total; $i++) {
     }
 
     if ($sizes[$i] > $max_size) {
-        echo "\"{$names[$i]}\" exceeds the 5MB limit.";
+        echo "\"{$names[$i]}\" exceeds the 10MB limit.";
         exit();
     }
 

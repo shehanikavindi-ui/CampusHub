@@ -532,7 +532,7 @@
                     </div>
 
                     <div class="em-upload-sub">
-                        PNG, JPG or WEBP &middot; up to 5MB each &middot; up to <b>10 photos</b>
+                        PNG, JPG or WEBP &middot; up to 10MB each &middot; up to <b>10 photos</b>
                     </div>
                 </label>
 
@@ -592,7 +592,7 @@
 
 
         var MAX_FILES = 10;
-        var MAX_SIZE = 5 * 1024 * 1024; // 5MB
+        var MAX_SIZE = 10 * 1024 * 1024; // 5MB
         var selectedFiles = [];
 
 
@@ -653,7 +653,7 @@
                     return;
                 }
                 if (file.size > MAX_SIZE) {
-                    showToast('"' + file.name + '" is over 5MB and was skipped.', 'error');
+                    showToast('"' + file.name + '" is over 10MB and was skipped.', 'error');
                     return;
                 }
                 var dupe = selectedFiles.some(function(f) {
