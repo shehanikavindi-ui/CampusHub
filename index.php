@@ -438,9 +438,30 @@ include "connection.php";
                                         </div>
                                         <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
                                     </div>
-                                    <button class="btn btn-primary btn-sm"
-                                        onclick="registerEvent(<?php echo $events_data['id']; ?>, <?php echo $_SESSION['u']['id']; ?>);">
-                                        Register</button>
+                                    <?php
+                                    if (!isset($_SESSION['u'])) {
+                                    ?>
+                                        <button class="btn btn-primary btn-sm"
+                                            onclick="gotoLogin();">
+                                            Register</button>
+                                        <?php
+                                    } else {
+                                        $register_rs = Database::search("SELECT * FROM `registration` WHERE `student_id`='" . $_SESSION['u']['id'] . "' 
+                                        AND `event_id`='" . $events_data['id'] . "' ");
+                                        $register_num = $register_rs->num_rows;
+                                        if ($register_num == 1) {
+                                        ?>
+                                            <button class="btn btn-secondary btn-sm"> Registered</button>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <button class="btn btn-primary btn-sm"
+                                                onclick="registerEvent(<?php echo $events_data['id']; ?>);">
+                                                Register</button>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         </article>
