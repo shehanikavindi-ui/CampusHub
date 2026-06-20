@@ -212,6 +212,9 @@ if (!isset($_SESSION['a'])) {
         }
 
         .logout-link {
+            background-color: transparent;
+            border: none;
+            width: 100%;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -605,7 +608,7 @@ if (!isset($_SESSION['a'])) {
 
         /* ─── LOGOUT MODAL ─── */
 
-        .modal-backdrop {
+        .l-modal-backdrop {
             position: fixed;
             inset: 0;
             background: rgba(15, 23, 42, 0.45);
@@ -620,12 +623,12 @@ if (!isset($_SESSION['a'])) {
             transition: opacity var(--transition-s);
         }
 
-        .modal-backdrop.open {
+        .l-modal-backdrop.open {
             opacity: 1;
             pointer-events: all;
         }
 
-        .modal-box {
+        .l-modal-box {
             background: white;
             border-radius: var(--radius-xl);
             border: 1px solid var(--neutral-200);
@@ -641,11 +644,11 @@ if (!isset($_SESSION['a'])) {
             transition: transform var(--transition-s);
         }
 
-        .modal-backdrop.open .modal-box {
+        .l-modal-backdrop.open .modal-box {
             transform: translateY(0) scale(1);
         }
 
-        .modal-icon-wrap {
+        .l-modal-icon-wrap {
             width: 52px;
             height: 52px;
             border-radius: var(--radius-lg);
@@ -657,19 +660,19 @@ if (!isset($_SESSION['a'])) {
             margin-bottom: 16px;
         }
 
-        .modal-icon-wrap i {
+        .l-modal-icon-wrap i {
             font-size: 24px;
             color: #DC2626;
         }
 
-        .modal-title {
+        .l-modal-title {
             font-family: var(--font-heading);
             font-size: var(--text-xl);
             color: var(--neutral-800);
             margin-bottom: 8px;
         }
 
-        .modal-body {
+        .l-modal-body {
             font-size: var(--text-sm);
             color: var(--neutral-500);
             line-height: 1.6;
@@ -677,7 +680,7 @@ if (!isset($_SESSION['a'])) {
             margin-bottom: 24px;
         }
 
-        .modal-actions {
+        .l-modal-actions {
             display: flex;
             gap: 10px;
             width: 100%;
@@ -813,15 +816,15 @@ if (!isset($_SESSION['a'])) {
             <div class="nav-divider"></div>
 
             <div class="nav-section">
-                <a class="nav-link <?= ($page === 'users') ? 'active' : '' ?>" href="?page=users">
+                <a class="nav-link <?= ($page === 'admins') ? 'active' : '' ?>" href="?page=admins">
                     <i class="ti ti-shield-lock"></i> Admins
                 </a>
             </div>
 
             <div class="nav-section">
-                <a class="logout-link" href="logout.php">
+                <button class="logout-link" onclick="openLogoutModal();">
                     <i class="ti ti-logout"></i> Logout
-                </a>
+                </button>
             </div>
 
         </nav>
@@ -842,7 +845,9 @@ if (!isset($_SESSION['a'])) {
             'event-media',
             'registrations',
             'announcements',
-            'add-announcement'
+            'add-announcement',
+            'forms',
+            'admins'
         ];
 
         if (!in_array($page, $allowed_pages)) {
@@ -891,17 +896,17 @@ if (!isset($_SESSION['a'])) {
     </div>
 
     <!-- Logout Confirmation Modal -->
-    <div class="modal-backdrop" id="logoutModal" onclick="closeLogoutModal(event)">
-        <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
-            <div class="modal-icon-wrap">
+    <div class="l-modal-backdrop" id="logoutModal" onclick="closeLogoutModal(event)">
+        <div class="l-modal-box" role="dialog" aria-modal="true" aria-labelledby="logoutModalTitle">
+            <div class="l-modal-icon-wrap">
                 <i class="ti ti-logout"></i>
             </div>
-            <h2 class="modal-title" id="logoutModalTitle">Log out?</h2>
-            <p class="modal-body">
+            <h2 class="l-modal-title" id="logoutModalTitle">Log out?</h2>
+            <p class="l-modal-body">
                 You're about to log out of the admin portal. Any unsaved changes will be lost.
                 Are you sure you want to continue?
             </p>
-            <div class="modal-actions">
+            <div class="l-modal-actions">
                 <button class="btn-cancel" onclick="closeModal()">Stay logged in</button>
                 <a href="../process/adminLogout.php" class="btn-logout">
                     <i class="ti ti-logout"></i> Log me out
@@ -936,7 +941,7 @@ if (!isset($_SESSION['a'])) {
             if (e.key === 'Escape') closeModal();
         });
 
-        
+
     </script>
 
 </body>
