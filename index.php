@@ -180,7 +180,7 @@ include "connection.php";
             $studentName = $_SESSION['u']['fname'];
 
             $today = date('l, j F');
-            ?>
+        ?>
 
             <!-- ===================== HERO (LOGGED IN) ===================== -->
             <br>
@@ -222,9 +222,9 @@ include "connection.php";
 
                 </div>
             </section>
-            <?php
+        <?php
         } else {
-            ?>
+        ?>
             <!-- ===================== HERO ===================== -->
             <section class="hero" id="home">
 
@@ -285,7 +285,7 @@ include "connection.php";
                     </div>
                 </div>
             </section>
-            <?php
+        <?php
         }
         ?>
 
@@ -351,7 +351,7 @@ include "connection.php";
                     for ($a = 0; $a < 3; $a++) {
                         $announcements_data = $announcements_rs->fetch_assoc();
                         $categoryColor = $announcements_data['category_color'] ?? '#9CA3AF';
-                        ?>
+                    ?>
                         <article class="ann-card ann-card--event"
                             style="--ann-color: <?php echo htmlspecialchars($categoryColor); ?>;
                             --ann-color-bg: color-mix(in srgb, <?php echo htmlspecialchars($categoryColor); ?> 15%, white);">
@@ -368,7 +368,7 @@ include "connection.php";
                                 <p class="ann-link"><?php echo $announcements_data['institution_name']; ?></p>
                             </div>
                         </article>
-                        <?php
+                    <?php
                     }
                     ?>
 
@@ -382,220 +382,7 @@ include "connection.php";
             </div>
         </section>
 
-        <!-- ===================== UPCOMING EVENTS ===================== -->
-        <section class="section section--soft" id="events">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Don't Miss Out</span>
-                    <h2 class="section-title">Upcoming Events</h2>
-                    <p class="section-subtitle">From workshops to championships — there is something for every student.
-                    </p>
-                </div>
 
-
-                <div class="events-grid">
-
-                    <?php
-                    $q = "SELECT e.*, c.name AS category_name, i.name AS institution_name, s.name AS status_name
-                    FROM event e
-                    INNER JOIN category c ON e.category_id = c.id
-                    LEFT JOIN institution i ON e.institution_id = i.id
-                    INNER JOIN status s ON e.status = s.id
-                    ORDER BY e.id DESC";
-
-                    $events_rs = Database::search($q);
-
-                    for ($e = 0; $e < 3; $e++) {
-                        $events_data = $events_rs->fetch_assoc();
-                        ?>
-
-                        <article class="event-card">
-                            <div class="event-img event-img--cultural">
-                                <?php
-                                if (!$events_data['banner_img']) {
-                                    ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
-                                } else {
-                                    ?>
-                                    <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
-                                    <?php
-                                }
-                                ?>
-
-                                <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
-                                <div class="event-date-pill">
-                                    <?php
-                                    $date = date("d M", strtotime($events_data['date']));
-                                    $day = date("d", strtotime($events_data['date']));
-                                    $month = date("M", strtotime($events_data['date']));
-                                    ?>
-                                    <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
-                                </div>
-                            </div>
-                            <div class="event-body">
-                                <div class="event-meta-row">
-                                    <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> -
-                                        <?php echo $events_data['end_time']; ?> </span>
-                                    <span><i class="fa-solid fa-location-dot"></i>
-                                        <?php echo $events_data['location']; ?></span>
-                                </div>
-                                <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
-                                <p class="event-desc"><?php echo $events_data['description']; ?></p>
-                                <div class="event-footer">
-                                    <div class="event-capacity">
-                                        <div class="capacity-bar">
-                                            <div class="capacity-fill" style="width:45%"></div>
-                                        </div>
-                                        <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?>
-                                            spots</span>
-                                    </div>
-                                    <?php
-                                    if (!isset($_SESSION['u'])) {
-                                        ?>
-                                        <button class="btn btn-primary btn-sm" onclick="gotoLogin();">
-                                            Register</button>
-                                        <?php
-                                    } else {
-                                        $register_rs = Database::search("SELECT * FROM `registration` WHERE `student_id`='" . $_SESSION['u']['id'] . "' 
-                                        AND `event_id`='" . $events_data['id'] . "' ");
-                                        $register_num = $register_rs->num_rows;
-                                        if ($register_num == 1) {
-                                            ?>
-                                            <button class="btn btn-secondary btn-sm"> Registered</button>
-                                            <?php
-                                        } else {
-                                            ?>
-                                            <button class="btn btn-primary btn-sm"
-                                                onclick="registerEvent(<?php echo $events_data['id']; ?>);">
-                                                Register</button>
-                                            <?php
-                                        }
-                                    }
-                                    ?>
-                                </div>
-                            </div>
-                        </article>
-                        <?php
-                    }
-                    ?>
-
-
-
-                </div>
-
-                <div class="section-footer">
-                    <a href="events.php" class="btn btn-outline-primary">View All Events</a>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================== CLUBS & SOCIETIES ===================== -->
-        <!-- <section class="section section--white" id="clubs">
-            <div class="container">
-                <div class="section-header">
-                    <span class="section-tag">Get Involved</span>
-                    <h2 class="section-title">Clubs &amp; Societies</h2>
-                    <p class="section-subtitle">Find your tribe. Join a community that shares your passions.</p>
-                </div>
-
-                <div class="clubs-grid">
-
-                    <div class="club-card">
-                        <div class="club-icon club-icon--tech">
-                            <i class="fa-solid fa-microchip"></i>
-                        </div>
-                        <div class="club-info">
-                            <h3 class="club-name">Tech Society</h3>
-                            <p class="club-desc">Explore coding, AI, robotics, and emerging tech through hackathons, workshops, and industry visits.</p>
-                            <div class="club-stats">
-                                <span><i class="fa-solid fa-users"></i> 342 Members</span>
-                                <span><i class="fa-solid fa-calendar-check"></i> 24 Events/yr</span>
-                            </div>
-                        </div>
-                        <a href="#" class="club-join">Join <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-
-                    <div class="club-card">
-                        <div class="club-icon club-icon--arts">
-                            <i class="fa-solid fa-palette"></i>
-                        </div>
-                        <div class="club-info">
-                            <h3 class="club-name">Drama &amp; Arts Society</h3>
-                            <p class="club-desc">Express yourself through theatre, visual arts, and creative performances. All skill levels are warmly welcome.</p>
-                            <div class="club-stats">
-                                <span><i class="fa-solid fa-users"></i> 210 Members</span>
-                                <span><i class="fa-solid fa-calendar-check"></i> 18 Events/yr</span>
-                            </div>
-                        </div>
-                        <a href="#" class="club-join">Join <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-
-                    <div class="club-card">
-                        <div class="club-icon club-icon--photo">
-                            <i class="fa-solid fa-camera"></i>
-                        </div>
-                        <div class="club-info">
-                            <h3 class="club-name">Photography Club</h3>
-                            <p class="club-desc">Capture the world through your lens. Weekly photo walks, editing tutorials, and annual exhibitions.</p>
-                            <div class="club-stats">
-                                <span><i class="fa-solid fa-users"></i> 178 Members</span>
-                                <span><i class="fa-solid fa-calendar-check"></i> 30 Events/yr</span>
-                            </div>
-                        </div>
-                        <a href="#" class="club-join">Join <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-
-                    <div class="club-card">
-                        <div class="club-icon club-icon--sports">
-                            <i class="fa-solid fa-futbol"></i>
-                        </div>
-                        <div class="club-info">
-                            <h3 class="club-name">Sports Federation</h3>
-                            <p class="club-desc">Compete and train across multiple sports disciplines, representing the university at inter-institutional championships.</p>
-                            <div class="club-stats">
-                                <span><i class="fa-solid fa-users"></i> 520 Members</span>
-                                <span><i class="fa-solid fa-calendar-check"></i> 40 Events/yr</span>
-                            </div>
-                        </div>
-                        <a href="#" class="club-join">Join <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-
-                    <div class="club-card">
-                        <div class="club-icon club-icon--debate">
-                            <i class="fa-solid fa-comments"></i>
-                        </div>
-                        <div class="club-info">
-                            <h3 class="club-name">Debate &amp; Oratory</h3>
-                            <p class="club-desc">Sharpen critical thinking and public speaking through competitive debates, MUN conferences, and training camps.</p>
-                            <div class="club-stats">
-                                <span><i class="fa-solid fa-users"></i> 145 Members</span>
-                                <span><i class="fa-solid fa-calendar-check"></i> 16 Events/yr</span>
-                            </div>
-                        </div>
-                        <a href="#" class="club-join">Join <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-
-                    <div class="club-card">
-                        <div class="club-icon club-icon--music">
-                            <i class="fa-solid fa-music"></i>
-                        </div>
-                        <div class="club-info">
-                            <h3 class="club-name">Music Society</h3>
-                            <p class="club-desc">From classical to contemporary — perform, collaborate, and create music in a supportive and inclusive community.</p>
-                            <div class="club-stats">
-                                <span><i class="fa-solid fa-users"></i> 193 Members</span>
-                                <span><i class="fa-solid fa-calendar-check"></i> 22 Events/yr</span>
-                            </div>
-                        </div>
-                        <a href="#" class="club-join">Join <i class="fa-solid fa-arrow-right"></i></a>
-                    </div>
-
-                </div>
-
-                <div class="section-footer">
-                    <a href="#" class="btn btn-outline-primary">Browse All 80+ Clubs</a>
-                </div>
-            </div>
-        </section> -->
 
 
         <?php
@@ -641,7 +428,7 @@ include "connection.php";
                     <?php if (!empty($home_gallery)):
                         foreach ($home_gallery as $i => $item):
                             $extra = $layout_classes[$i] ?? '';
-                            ?>
+                    ?>
                             <div class="gallery-item <?= $extra ?>"
                                 style="background-image: url('<?= htmlspecialchars($item['photo']) ?>');">
                                 <div class="gallery-overlay">
@@ -668,9 +455,115 @@ include "connection.php";
         </section>
 
 
+        <!-- ===================== UPCOMING EVENTS ===================== -->
+        <section class="section section--soft" id="events">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">Don't Miss Out</span>
+                    <h2 class="section-title">Upcoming Events</h2>
+                    <p class="section-subtitle">From workshops to championships — there is something for every student.
+                    </p>
+                </div>
+
+
+                <div class="events-grid">
+
+                    <?php
+                    $q = "SELECT e.*, c.name AS category_name, i.name AS institution_name, s.name AS status_name
+                    FROM event e
+                    INNER JOIN category c ON e.category_id = c.id
+                    LEFT JOIN institution i ON e.institution_id = i.id
+                    INNER JOIN status s ON e.status = s.id
+                    ORDER BY e.id DESC";
+
+                    $events_rs = Database::search($q);
+
+                    for ($e = 0; $e < 3; $e++) {
+                        $events_data = $events_rs->fetch_assoc();
+                    ?>
+
+                        <article class="event-card">
+                            <div class="event-img event-img--cultural">
+                                <?php
+                                if (!$events_data['banner_img']) {
+                                ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
+                                                                                        } else {
+                                                                                            ?>
+                                    <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
+                                <?php
+                                                                                        }
+                                ?>
+
+                                <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
+                                <div class="event-date-pill">
+                                    <?php
+                                    $date = date("d M", strtotime($events_data['date']));
+                                    $day = date("d", strtotime($events_data['date']));
+                                    $month = date("M", strtotime($events_data['date']));
+                                    ?>
+                                    <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
+                                </div>
+                            </div>
+                            <div class="event-body">
+                                <div class="event-meta-row">
+                                    <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> -
+                                        <?php echo $events_data['end_time']; ?> </span>
+                                    <span><i class="fa-solid fa-location-dot"></i>
+                                        <?php echo $events_data['location']; ?></span>
+                                </div>
+                                <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
+                                <p class="event-desc"><?php echo $events_data['description']; ?></p>
+                                <div class="event-footer">
+                                    <div class="event-capacity">
+                                        <div class="capacity-bar">
+                                            <div class="capacity-fill" style="width:45%"></div>
+                                        </div>
+                                        <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?>
+                                            spots</span>
+                                    </div>
+                                    <?php
+                                    if (!isset($_SESSION['u'])) {
+                                    ?>
+                                        <button class="btn btn-primary btn-sm" onclick="gotoLogin();">
+                                            Register</button>
+                                        <?php
+                                    } else {
+                                        $register_rs = Database::search("SELECT * FROM `registration` WHERE `student_id`='" . $_SESSION['u']['id'] . "' 
+                                        AND `event_id`='" . $events_data['id'] . "' ");
+                                        $register_num = $register_rs->num_rows;
+                                        if ($register_num == 1) {
+                                        ?>
+                                            <button class="btn btn-secondary btn-sm"> Registered</button>
+                                        <?php
+                                        } else {
+                                        ?>
+                                            <button class="btn btn-primary btn-sm"
+                                                onclick="registerEvent(<?php echo $events_data['id']; ?>);">
+                                                Register</button>
+                                    <?php
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </article>
+                    <?php
+                    }
+                    ?>
+
+
+
+                </div>
+
+                <div class="section-footer">
+                    <a href="events.php" class="btn btn-outline-primary">View All Events</a>
+                </div>
+            </div>
+        </section>
+
         <?php
         if (!isset($_SESSION["u"])) {
-            ?>
+        ?>
             <!-- ===================== CTA BANNER ===================== -->
             <section class="cta-section" id="join">
                 <div class="cta-bg">
@@ -694,7 +587,7 @@ include "connection.php";
                     </div>
                 </div>
             </section>
-            <?php
+        <?php
         }
         ?>
 

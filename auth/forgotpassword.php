@@ -171,7 +171,7 @@
                     </div>
                     <h2>Password updated!</h2>
                     <p>Your password has been reset successfully. You can now sign in with your new password.</p>
-                    <a href="auth/studentLogin.php" class="fp-btn" style="text-decoration:none;">
+                    <a href="studentLogin.php" class="fp-btn" style="text-decoration:none;">
                         <i class="bi bi-box-arrow-in-right"></i>
                         Go to sign in
                     </a>
