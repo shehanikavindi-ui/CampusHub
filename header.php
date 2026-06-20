@@ -1,3 +1,6 @@
+<?php
+$currentPage = basename($_SERVER['PHP_SELF']);
+?>
 <header class="header" id="header">
     <nav class="nav container">
         <a href="#home" class="nav-logo">
@@ -5,26 +8,30 @@
             Campus<span class="logo-accent">Hub</span>
         </a>
         <ul class="nav-links" id="navLinks">
-            <li><a href="index.php" class="nav-link active">Home</a></li>
-            <li><a href="events.php" class="nav-link">Events</a></li>
-            <li><a href="gallery.php" class="nav-link">Gallery</a></li>
-            <li><a href="announcements.php" class="nav-link">Announcements</a></li>
-            <li><a href="contact.php" class="nav-link">Contact</a></li>
+            <li><a href="index.php" class="nav-link <?= $currentPage == 'index.php' ? 'active' : '' ?>">Home</a></li>
+            <li><a href="events.php" class="nav-link <?= $currentPage == 'events.php' ? 'active' : '' ?>">Events</a>
+            </li>
+            <li><a href="gallery.php" class="nav-link <?= $currentPage == 'gallery.php' ? 'active' : '' ?>">Gallery</a>
+            </li>
+            <li><a href="announcements.php"
+                    class="nav-link <?= $currentPage == 'announcements.php' ? 'active' : '' ?>">Announcements</a></li>
+            <li><a href="contact.php" class="nav-link <?= $currentPage == 'contact.php' ? 'active' : '' ?>">Contact</a>
+            </li>
         </ul>
         <div class="nav-actions">
             <?php
-            if(isset($_SESSION["u"])){
-            ?>
-            <a href="student-profile.php" class="btn btn-primary">My Profile</a>
-            <?php
+            if (isset($_SESSION["u"])) {
+                ?>
+                <a href="student-profile.php" class="btn btn-primary">My Profile</a>
+                <?php
             } else {
-            ?>
-            <a href="auth/studentLogin.php" class="btn btn-ghost">Sign In</a>
-            <a href="auth/studentRegister.php" class="btn btn-primary">Register</a>
-            <?php
+                ?>
+                <a href="auth/studentLogin.php" class="btn btn-ghost">Sign In</a>
+                <a href="auth/studentRegister.php" class="btn btn-primary">Register</a>
+                <?php
             }
             ?>
-            
+
         </div>
         <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu">
             <span></span>

@@ -819,14 +819,13 @@ while ($row = $student_rs->fetch_assoc()) {
 
     function filterStudents() {
         const q = document.getElementById('studentSearch').value.toLowerCase();
-        const st = document.getElementById('statusFilter').value;
         const co = document.getElementById('courseFilter').value;
 
         filtered = students.filter(s =>
-            (s.name.toLowerCase().includes(q) || s.id.toLowerCase().includes(q)) &&
-            (!st || s.status === st) &&
+            (s.name.toLowerCase().includes(q) || s.st_id.toLowerCase().includes(q)) &&
             (!co || s.institute === co)
         );
+
         currentPage = 1;
         renderTable();
     }

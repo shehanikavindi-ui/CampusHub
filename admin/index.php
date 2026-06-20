@@ -808,7 +808,8 @@ if (!isset($_SESSION['a'])) {
             </div>
 
             <div class="nav-section">
-                <a class="nav-link <?= ($page === 'organization') ? 'active' : '' ?>" href="?page=organization">
+                <a class="nav-link <?= ($page === 'organizational-info') ? 'active' : '' ?>"
+                    href="?page=organizational-info">
                     <i class="ti ti-building"></i> Organisation Info
                 </a>
             </div>
@@ -847,7 +848,8 @@ if (!isset($_SESSION['a'])) {
             'announcements',
             'add-announcement',
             'forms',
-            'admins'
+            'admins',
+            'organizational-info'
         ];
 
         if (!in_array($page, $allowed_pages)) {
@@ -907,7 +909,7 @@ if (!isset($_SESSION['a'])) {
                 Are you sure you want to continue?
             </p>
             <div class="l-modal-actions">
-                <button class="btn-cancel" onclick="closeModal()">Stay logged in</button>
+                <button class="btn-cancel" onclick="closeLModal()">Stay logged in</button>
                 <a href="../process/adminLogout.php" class="btn-logout">
                     <i class="ti ti-logout"></i> Log me out
                 </a>
@@ -927,18 +929,18 @@ if (!isset($_SESSION['a'])) {
             document.getElementById('logoutModal').classList.add('open');
         }
 
-        function closeModal() {
+        function closeLModal() {
             document.getElementById('logoutModal').classList.remove('open');
         }
 
         function closeLogoutModal(e) {
             // close only when clicking the backdrop itself, not the box inside
-            if (e.target === document.getElementById('logoutModal')) closeModal();
+            if (e.target === document.getElementById('logoutModal')) closeLModal();
         }
 
         // close on Escape key
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeModal();
+            if (e.key === 'Escape') closeLModal();
         });
 
 
