@@ -1,6 +1,11 @@
 <?php
 session_start();
 include "connection.php";
+
+if (!isset($_SESSION['u'])) {
+    header("Location: /CampusHub/auth/studentLogin.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -15,8 +20,11 @@ include "connection.php";
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <style>
         body {
             min-height: 100vh;
@@ -103,14 +111,21 @@ include "connection.php";
         }
 
         .profile-logout {
-            border-color: var(--neutral-200);
-            background: var(--bg-white);
-            color: #B91C1C;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.55rem;
+            padding: 0.32rem 0.55rem;
+            border-radius: var(--radius-full);
+            color: var(--neutral-600);
+            font-size: var(--text-xs);
+            font-weight: 800;
+            background: var(--neutral-100);
         }
 
         .profile-logout:hover {
-            border-color: #FECACA;
             background: #FEF2F2;
+            color: #bd3434;
         }
 
         .profile-main {
@@ -702,38 +717,117 @@ include "connection.php";
             font-size: var(--text-sm);
         }
 
-        .logout-panel {
-            padding: 1rem;
-            border-color: #FECACA;
-            background: #FFFBFB;
-        }
 
-        .logout-panel p {
-            margin: 0.35rem 0 0.9rem;
-            color: var(--text-secondary);
-            font-size: var(--text-sm);
-        }
-
-        .logout-btn {
-            display: inline-flex;
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.45rem;
-            width: 100%;
-            min-height: 42px;
-            border: 1px solid #FECACA;
-            border-radius: var(--radius-lg);
-            background: #FFFFFF;
-            color: #B91C1C;
-            font: inherit;
-            font-weight: 800;
-            text-decoration: none;
-            transition: background var(--transition), transform var(--transition);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 400ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .logout-btn:hover {
+        .modal-backdrop.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: white;
+            border-radius: 1.25rem;
+            border: 1px solid #E2E8F0;
+            box-shadow: 0 24px 48px -8px rgba(0, 0, 0, 0.10);
+            padding: 28px 24px 24px;
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 16px;
+            transform: translateY(12px) scale(0.98);
+            transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-backdrop.open .modal-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-icon-wrap {
+            width: 46px;
+            height: 46px;
+            border-radius: 0.875rem;
             background: #FEF2F2;
-            transform: translateY(-1px);
+            border: 1px solid #FECACA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon-wrap i {
+            font-size: 22px;
+            color: #DC2626;
+        }
+
+        .modal-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1E293B;
+            margin: 0;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 0.625rem;
+            border: 1px solid #E2E8F0;
+            background: white;
+            color: #475569;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 250ms ease;
+        }
+
+        .btn-cancel:hover {
+            background: #F1F5F9;
+            border-color: #CBD5E1;
+        }
+
+        .btn-logout {
+            flex: 1;
+            padding: 8px 14px;
+            border-radius: 0.625rem;
+            background: #DC2626;
+            color: white;
+            font-size: 0.875rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: background 250ms ease;
+        }
+
+        .btn-logout:hover {
+            background: #B91C1C;
+        }
+
+        .btn-logout i {
+            font-size: 14px;
         }
 
         @media (max-width: 980px) {
@@ -858,6 +952,9 @@ include "connection.php";
                                 <h2><?php echo $student_data['fname'] . ' ' . $student_data['lname']; ?></h2>
                                 <p><?php echo $student_data['course_name']; ?> · <?php echo $student_data['institution_name']; ?></p>
                                 <span class="profile-status"><i class="bi bi-patch-check"></i> Verified student</span>
+                                <a class="profile-logout" href="#" title="Log out" onclick="openLogoutModal(); return false;">
+                                    <i class="ti ti-logout"></i> Log out
+                                </a>
                             </div>
 
                             <div class="profile-actions ms-5">
@@ -970,51 +1067,43 @@ include "connection.php";
                             for ($r = 0; $r < $myRegistrations_num; $r++) {
                                 $myRegistrations_data = $myRegistrations_rs->fetch_assoc();
                             ?>
-                            <article class="joined-event-card">
-                                <div class="joined-event-banner">
-                                    <img src="uploads/events/<?php echo $myRegistrations_data['banner_img']; ?>" alt="" />
-                                    <span class="joined-event-badge"><?php echo $myRegistrations_data['category_name']; ?></span>
-                                    <div class="joined-event-date">
-                                        <?php
-                                        $date = date("d M", strtotime($myRegistrations_data['event_date']));
-                                        $day = date("d", strtotime($myRegistrations_data['event_date']));
-                                        $month = date("M", strtotime($myRegistrations_data['event_date']));
-                                        ?>
-                                        <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
+                                <article class="joined-event-card">
+                                    <div class="joined-event-banner">
+                                        <img src="uploads/events/<?php echo $myRegistrations_data['banner_img']; ?>" alt="" />
+                                        <span class="joined-event-badge"><?php echo $myRegistrations_data['category_name']; ?></span>
+                                        <div class="joined-event-date">
+                                            <?php
+                                            $date = date("d M", strtotime($myRegistrations_data['event_date']));
+                                            $day = date("d", strtotime($myRegistrations_data['event_date']));
+                                            $month = date("M", strtotime($myRegistrations_data['event_date']));
+                                            ?>
+                                            <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="joined-event-body">
-                                    <h3 class="joined-event-title"><?php echo $myRegistrations_data['title']; ?></h3>
-                                    <p class="joined-event-meta">
-                                        <i class="bi bi-clock"></i> <?php echo $myRegistrations_data['start_time']; ?>
-                                        <span class="joined-event-dot">&middot;</span>
-                                        <i class="bi bi-geo-alt"></i> <?php echo $myRegistrations_data['location']; ?>
-                                    </p>
-                                    <div class="joined-event-footer">
-                                        <span class="joined-event-institute">
-                                            <i class="bi bi-building"></i> <?php echo $myRegistrations_data['institution_name']; ?>
-                                        </span>
-                                        <span class="joined-event-status">
-                                            <i class="bi bi-check-circle-fill"></i> Registered
-                                        </span>
+                                    <div class="joined-event-body">
+                                        <h3 class="joined-event-title"><?php echo $myRegistrations_data['title']; ?></h3>
+                                        <p class="joined-event-meta">
+                                            <i class="bi bi-clock"></i> <?php echo $myRegistrations_data['start_time']; ?>
+                                            <span class="joined-event-dot">&middot;</span>
+                                            <i class="bi bi-geo-alt"></i> <?php echo $myRegistrations_data['location']; ?>
+                                        </p>
+                                        <div class="joined-event-footer">
+                                            <span class="joined-event-institute">
+                                                <i class="bi bi-building"></i> <?php echo $myRegistrations_data['institution_name']; ?>
+                                            </span>
+                                            <span class="joined-event-status">
+                                                <i class="bi bi-check-circle-fill"></i> Registered
+                                            </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </article>
+                                </article>
                             <?php
                             }
 
                             ?>
 
                         </div>
-                        
-                    </article>
 
-                    <article class="profile-card logout-panel">
-                        <h2 class="profile-section-title">End session</h2>
-                        <p>Log out when you are finished using CampusHub on this device.</p>
-                        <a href="auth/studentLogin.php" class="logout-btn">
-                            <i class="bi bi-box-arrow-right"></i> Log out
-                        </a>
                     </article>
                 </aside>
             </section>
@@ -1041,6 +1130,22 @@ include "connection.php";
             <div class="pic-modal-actions">
                 <button type="button" class="profile-btn profile-btn-secondary" id="picModalCancelBtn">Cancel</button>
                 <button type="button" class="profile-btn profile-btn-primary" id="picModalSaveBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal-backdrop" id="logoutModal" onclick="closeLogoutModal(event)">
+        <div class="modal-box" role="dialog" aria-modal="true">
+            <div class="modal-icon-wrap">
+                <i class="ti ti-logout"></i>
+            </div>
+            <h2 class="modal-title">Are you sure you want to log out?</h2>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Not yet</button>
+                <a href="process/studentLogout.php" class="btn-logout">
+                    <i class="ti ti-logout"></i> Yes, log out
+                </a>
             </div>
         </div>
     </div>
@@ -1159,7 +1264,23 @@ include "connection.php";
             setEditing(false);
             saveChanges();
         });
-    </script>
+
+        function openLogoutModal() {
+            document.getElementById('logoutModal').classList.add('open');
+        }
+
+        function closeModal() {
+            document.getElementById('logoutModal').classList.remove('open');
+        }
+
+        function closeLogoutModal(e) {
+            if (e.target === document.getElementById('logoutModal')) closeModal();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+            </script>
 
 
 </body>

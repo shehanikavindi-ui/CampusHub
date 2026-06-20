@@ -660,6 +660,11 @@
                 </div>
 
                 <div class="detail-item">
+                    <label>Programme</label>
+                    <span id="modalCourse">--</span>
+                </div>
+
+                <div class="detail-item">
                     <label>Year</label>
                     <span id="modalYear">--</span>
                 </div>
@@ -707,8 +712,10 @@ while ($row = $student_rs->fetch_assoc()) {
         "name" => $row["fname"] . " " . $row["lname"],
         "institute" => $row["institution_name"],
         "faculty" => $row["faculty_name"],
+        "course" => $row["course_name"],
         "year" => $row["year_name"],
         "mobile" => $row["mobile"],
+        "email" => $row["email"],
         "status" => $row["status"] ?? "Active",
         "dob" => $row["dob"],
         "gender" => $row["gender_name"],
@@ -862,8 +869,9 @@ while ($row = $student_rs->fetch_assoc()) {
         document.getElementById("modalGender").textContent = s.gender;
         document.getElementById("modalInstitute").textContent = s.institute;
         document.getElementById("modalFaculty").textContent = s.faculty;
+        document.getElementById("modalCourse").textContent = s.course;
         document.getElementById("modalYear").textContent = s.year;
-        document.getElementById("modalEmail").textContent = s.id.toLowerCase() + "@campushub.ac";
+        document.getElementById("modalEmail").textContent = s.email;
         document.getElementById("modalPhone").textContent = s.mobile;
 
         const statusEl = document.getElementById("modalStatus");
