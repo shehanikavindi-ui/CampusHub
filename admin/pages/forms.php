@@ -457,7 +457,7 @@ while ($row = $forms_rs->fetch_assoc()) {
         'body' => $row['body'],
         'student' => [
             'pfp' => $row['pfp'],
-            'name' => $row['fname'] . $row['lname'],
+            'name' => $row['fname'] . " " . $row['lname'],
             'email' => $row['email'],
             'phone' => $row['mobile'],
         ],
