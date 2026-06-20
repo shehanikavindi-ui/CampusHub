@@ -15,7 +15,9 @@ include "connection.php";
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
-    
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
     <style>
         .hero-auth {
             position: relative;
@@ -175,9 +177,9 @@ include "connection.php";
 
             $today = date('l, j F');
         ?>
-            
+
             <!-- ===================== HERO (LOGGED IN) ===================== -->
-             <br>
+            <br>
             <section class="hero-auth mt-1">
                 <div class="hero-auth-shapes" aria-hidden="true">
                     <span class="hero-auth-shape hero-auth-shape--1"></span>
@@ -283,11 +285,11 @@ include "connection.php";
         }
         ?>
 
-            <!-- toast -->
-            <div class="toast-msg" id="toast-msg" >
-                <i id="toast-icon" class="bi bi-x-circle-fill"></i>
-                <span id="toast-text" class="toast-text"></span>
-            </div>
+        <!-- toast -->
+        <div class="toast-msg" id="toast-msg">
+            <i id="toast-icon" class="bi bi-x-circle-fill"></i>
+            <span id="toast-text" class="toast-text"></span>
+        </div>
 
 
         <!-- ===================== QUICK HIGHLIGHTS STRIP ===================== -->
@@ -386,65 +388,65 @@ include "connection.php";
 
                 <div class="events-grid">
 
-                <?php
-                $q = "SELECT e.*, c.name AS category_name, i.name AS institution_name, s.name AS status_name
+                    <?php
+                    $q = "SELECT e.*, c.name AS category_name, i.name AS institution_name, s.name AS status_name
                     FROM event e
                     INNER JOIN category c ON e.category_id = c.id
                     LEFT JOIN institution i ON e.institution_id = i.id
                     INNER JOIN status s ON e.status = s.id
                     ORDER BY e.id DESC";
 
-                $events_rs = Database::search($q);
+                    $events_rs = Database::search($q);
 
-                for ($e=0; $e < 3; $e++) { 
-                    $events_data = $events_rs->fetch_assoc();
+                    for ($e = 0; $e < 3; $e++) {
+                        $events_data = $events_rs->fetch_assoc();
                     ?>
 
-                    <article class="event-card">
-                        <div class="event-img event-img--cultural">
-                            <?php
-                            if (!$events_data['banner_img']) {
+                        <article class="event-card">
+                            <div class="event-img event-img--cultural">
+                                <?php
+                                if (!$events_data['banner_img']) {
                                 ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
-                            } else {
-                                ?>
-                                <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
+                                                                                    } else {
+                                                                                        ?>
+                                    <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
                                 <?php
-                            }
-                            ?>
-                            
-                            <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
-                            <div class="event-date-pill">
-                                <?php
-                                $date = date("d M", strtotime($events_data['date']));
-                                $day = date("d", strtotime($events_data['date']));
-                                $month = date("M", strtotime($events_data['date']));
+                                                                                    }
                                 ?>
-                                <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
-                            </div>
-                        </div>
-                        <div class="event-body">
-                            <div class="event-meta-row">
-                                <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> - <?php echo $events_data['end_time']; ?> </span>
-                                <span><i class="fa-solid fa-location-dot"></i> <?php echo $events_data['location']; ?></span>
-                            </div>
-                            <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
-                            <p class="event-desc"><?php echo $events_data['description']; ?></p>
-                            <div class="event-footer">
-                                <div class="event-capacity">
-                                    <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:45%"></div>
-                                    </div>
-                                    <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
+
+                                <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
+                                <div class="event-date-pill">
+                                    <?php
+                                    $date = date("d M", strtotime($events_data['date']));
+                                    $day = date("d", strtotime($events_data['date']));
+                                    $month = date("M", strtotime($events_data['date']));
+                                    ?>
+                                    <b><?php echo $day; ?></b><span><?php echo $month; ?></span>
                                 </div>
-                                <button class="btn btn-primary btn-sm" 
-                                    onclick="registerEvent(<?php echo $events_data['id']; ?>, <?php echo $_SESSION['u']['id']; ?>);">
-                                    Register</button>
                             </div>
-                        </div>
-                    </article>
+                            <div class="event-body">
+                                <div class="event-meta-row">
+                                    <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> - <?php echo $events_data['end_time']; ?> </span>
+                                    <span><i class="fa-solid fa-location-dot"></i> <?php echo $events_data['location']; ?></span>
+                                </div>
+                                <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
+                                <p class="event-desc"><?php echo $events_data['description']; ?></p>
+                                <div class="event-footer">
+                                    <div class="event-capacity">
+                                        <div class="capacity-bar">
+                                            <div class="capacity-fill" style="width:45%"></div>
+                                        </div>
+                                        <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm"
+                                        onclick="registerEvent(<?php echo $events_data['id']; ?>, <?php echo $_SESSION['u']['id']; ?>);">
+                                        Register</button>
+                                </div>
+                            </div>
+                        </article>
                     <?php
-                }
-                ?>
+                    }
+                    ?>
 
 
 
@@ -565,6 +567,25 @@ include "connection.php";
             </div>
         </section> -->
 
+
+        <?php
+        $grs = Database::search("
+            SELECT
+                e.id,
+                e.title,
+                MIN(ei.path) AS photo
+            FROM event e
+            INNER JOIN event_images ei ON ei.event_id = e.id
+            GROUP BY e.id, e.title
+            ORDER BY e.id DESC
+            LIMIT 6
+        ");
+
+        $home_gallery = [];
+        while ($grow = $grs->fetch_assoc()) {
+            $home_gallery[] = $grow;
+        }
+        ?>
         <!-- ===================== GALLERY ===================== -->
         <section class="section section--dark" id="gallery">
             <div class="container">
@@ -574,43 +595,39 @@ include "connection.php";
                     <p class="section-subtitle section-subtitle--light">A glimpse into the vibrant life on campus — events, faces, and moments.</p>
                 </div>
 
+                <?php
+                $layout_classes = [
+                    'gallery-item--tall',   // 1 – spans 2 rows
+                    '',                     // 2
+                    '',                     // 3
+                    'gallery-item--wide',   // 4 – spans 2 cols
+                    '',                     // 5
+                    '',                     // 6
+                ];
+                ?>
+
                 <div class="gallery-grid">
-                    <div class="gallery-item gallery-item--tall gallery-g1">
-                        <div class="gallery-overlay">
-                            <i class="fa-solid fa-rocket"></i>
-                            <span>Tech Innovation Summit</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item gallery-g2">
-                        <div class="gallery-overlay">
-                            <i class="fa-solid fa-masks-theater"></i>
-                            <span>Cultural Festival Night</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item gallery-g3">
-                        <div class="gallery-overlay">
-                            <i class="fa-solid fa-person-running"></i>
-                            <span>Annual Sports Day</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item gallery-item--wide gallery-g4">
-                        <div class="gallery-overlay">
-                            <i class="fa-solid fa-camera"></i>
-                            <span>Photography Exhibition</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item gallery-g5">
-                        <div class="gallery-overlay">
-                            <i class="fa-solid fa-users-gear"></i>
-                            <span>Leadership Workshop</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item gallery-g6">
-                        <div class="gallery-overlay">
-                            <i class="fa-solid fa-comments"></i>
-                            <span>Debate Championship</span>
-                        </div>
-                    </div>
+                    <?php if (!empty($home_gallery)):
+                        foreach ($home_gallery as $i => $item):
+                            $extra = $layout_classes[$i] ?? '';
+                    ?>
+                            <div class="gallery-item <?= $extra ?>"
+                                style="background-image: url('<?= htmlspecialchars($item['photo']) ?>');">
+                                <div class="gallery-overlay">
+                                    <i class="fa-solid fa-camera"></i>
+                                    <span><?= htmlspecialchars($item['title']) ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach;
+                    else: ?>
+                        <!-- fallback gradients if no photos yet -->
+                        <div class="gallery-item gallery-item--tall gallery-g1"></div>
+                        <div class="gallery-item gallery-g2"></div>
+                        <div class="gallery-item gallery-g3"></div>
+                        <div class="gallery-item gallery-item--wide gallery-g4"></div>
+                        <div class="gallery-item gallery-g5"></div>
+                        <div class="gallery-item gallery-g6"></div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="section-footer">

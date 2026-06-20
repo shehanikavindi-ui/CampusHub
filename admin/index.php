@@ -22,6 +22,8 @@ if (!isset($_SESSION['a'])) {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     <link rel="stylesheet" href="../css/adminStyle.css">
 
+    <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml" />
+
     <style>
         * {
             margin: 0;
@@ -78,17 +80,17 @@ if (!isset($_SESSION['a'])) {
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: var(--primary);
-            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        .logo-icon i {
-            font-size: 20px;
-            color: white;
+        .nav-logo-icon {
+            font-size: 1.6rem;
+            color: var(--teal-400);
+            line-height: 1.2;
+            display: inline-block;
         }
 
         .logo-text {
@@ -737,7 +739,7 @@ if (!isset($_SESSION['a'])) {
         <div class="logo">
             <div class="logo-inner">
                 <div class="logo-icon">
-                    <i class="ti ti-building-community"></i>
+                    <span class="nav-logo-icon">&#x2B22;</span>
                 </div>
                 <div>
                     <div class="logo-text">CampusHub</div>

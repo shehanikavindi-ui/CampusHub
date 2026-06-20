@@ -17,6 +17,8 @@ include "connection.php";
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
     <style>
         .contact-section {
             padding: 48px 50px;

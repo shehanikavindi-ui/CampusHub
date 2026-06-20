@@ -16,6 +16,9 @@ include "connection.php";
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
   <link rel="stylesheet" href="css/bootstrap.css">
   <link rel="stylesheet" href="css/style.css">
+
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  
   <style>
     .gallery-page {
       display: flex;

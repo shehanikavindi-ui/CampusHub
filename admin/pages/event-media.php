@@ -495,17 +495,23 @@
                         <select class="em-select" id="em-event" name="event_id" required>
                             <option value="" disabled selected>Select an event</option>
                             <?php
-                            $q = "SELECT * FROM event ORDER BY id DESC";
+                            $q = "SELECT event.*, institution.name AS institution_name
+                                FROM event
+                                INNER JOIN institution
+                                ON event.institution_id = institution.id
+                                ORDER BY event.id DESC";
+
                             $events_rs = Database::search($q);
                             $events_num = $events_rs->num_rows;
 
                             for ($e = 0; $e < $events_num; $e++) {
                                 $events_data = $events_rs->fetch_assoc();
                             ?>
-                                <option value="<?php echo $events_data['id']; ?>"><?php echo $events_data['title']; ?></option>
+                                <option value="<?php echo $events_data['id']; ?>">
+                                    <?php echo $events_data['title']; ?> | <?php echo $events_data['institution_name']; ?>
+                                </option>
                             <?php
                             }
-
                             ?>
                         </select>
                         <div class="em-hint">Media will be saved under this event gallery.</div>
