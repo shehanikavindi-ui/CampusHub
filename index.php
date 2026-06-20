@@ -487,11 +487,11 @@ include "connection.php";
                                 <?php
                                 if (!$events_data['banner_img']) {
                                 ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
-                                                                                        } else {
-                                                                                            ?>
+                                                                                    } else {
+                                                                                        ?>
                                     <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
                                 <?php
-                                                                                        }
+                                                                                    }
                                 ?>
 
                                 <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
@@ -514,12 +514,20 @@ include "connection.php";
                                 <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
                                 <p class="event-desc"><?php echo $events_data['description']; ?></p>
                                 <div class="event-footer">
+                                    <?php
+                                    $spots_rs = Database::search("SELECT COUNT(*) AS cnt FROM `registration` 
+                                    WHERE `event_id`='" . $events_data['id'] . "'");
+                                    $spots_taken = $spots_rs->fetch_assoc()['cnt'];
+                                    $capacity = $events_data['capacity'];
+                                    $pct = $capacity > 0 ? min(100, round(($spots_taken / $capacity) * 100)) : 0;
+                                    ?>
                                     <div class="event-capacity">
                                         <div class="capacity-bar">
-                                            <div class="capacity-fill" style="width:45%"></div>
+                                            <div class="capacity-fill" style="width:<?php echo $pct; ?>%"></div>
                                         </div>
-                                        <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?>
-                                            spots</span>
+                                        <span class="capacity-label">
+                                            <?php echo $spots_taken; ?> / <?php echo $capacity; ?> spots
+                                        </span>
                                     </div>
                                     <?php
                                     if (!isset($_SESSION['u'])) {

@@ -4,6 +4,7 @@ include "connection.php";
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,33 +16,34 @@ include "connection.php";
     <link rel="stylesheet" href="css/style.css">
 
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-    
+
 </head>
+
 <body>
 
     <!-- ===================== HEADER ===================== -->
-    <?php 
-    include "header.php"; 
-    ?>       
-        
-        
-        <section class="section section--soft" id="events">
-            <div class="container">
-
-                <!-- toast -->
-                <div class="toast-msg" id="toast-msg" >
-                    <i id="toast-icon" class="bi bi-x-circle-fill"></i>
-                    <span id="toast-text" class="toast-text"></span>
-                </div>
-
-                <div class="section-header">
-                    <span class="section-tag">Don't Miss Out</span>
-                    <h2 class="section-title">Upcoming Events</h2>
-                    <p class="section-subtitle">From workshops to championships — there is something for every student.</p>
-                </div>
+    <?php
+    include "header.php";
+    ?>
 
 
-                <div class="events-grid">
+    <section class="section section--soft" id="events">
+        <div class="container">
+
+            <!-- toast -->
+            <div class="toast-msg" id="toast-msg">
+                <i id="toast-icon" class="bi bi-x-circle-fill"></i>
+                <span id="toast-text" class="toast-text"></span>
+            </div>
+
+            <div class="section-header">
+                <span class="section-tag">Don't Miss Out</span>
+                <h2 class="section-title">Upcoming Events</h2>
+                <p class="section-subtitle">From workshops to championships — there is something for every student.</p>
+            </div>
+
+
+            <div class="events-grid">
 
                 <?php
                 $q = "SELECT e.*, c.name AS category_name, i.name AS institution_name, s.name AS status_name
@@ -54,22 +56,22 @@ include "connection.php";
                 $events_rs = Database::search($q);
                 $events_num = $events_rs->num_rows;
 
-                
-                for ($e=0; $e < $events_num; $e++) { 
+
+                for ($e = 0; $e < $events_num; $e++) {
                     $events_data = $events_rs->fetch_assoc();
-                    ?>
+                ?>
                     <article class="event-card">
                         <div class="event-img event-img--cultural">
                             <?php
                             if (!$events_data['banner_img']) {
-                                ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
-                            } else {
-                                ?>
+                            ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
+                                                                                    } else {
+                                                                                        ?>
                                 <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
-                                <?php
-                            }
+                            <?php
+                                                                                    }
                             ?>
-                            
+
                             <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
                             <div class="event-date-pill">
                                 <?php
@@ -88,56 +90,64 @@ include "connection.php";
                             <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
                             <p class="event-desc"><?php echo $events_data['description']; ?></p>
                             <div class="event-footer">
+                                <?php
+                                $spots_rs = Database::search("SELECT COUNT(*) AS cnt FROM `registration` 
+                               WHERE `event_id`='" . $events_data['id'] . "'");
+                                $spots_taken = $spots_rs->fetch_assoc()['cnt'];
+                                $capacity = $events_data['capacity'];
+                                $pct = $capacity > 0 ? min(100, round(($spots_taken / $capacity) * 100)) : 0;
+                                ?>
                                 <div class="event-capacity">
                                     <div class="capacity-bar">
-                                        <div class="capacity-fill" style="width:45%"></div>
+                                        <div class="capacity-fill" style="width:<?php echo $pct; ?>%"></div>
                                     </div>
-                                    <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
+                                    <span class="capacity-label">
+                                        <?php echo $spots_taken; ?> / <?php echo $capacity; ?> spots
+                                    </span>
                                 </div>
                                 <?php
                                 if (!isset($_SESSION['u'])) {
                                 ?>
-                                    <button class="btn btn-primary btn-sm" 
+                                    <button class="btn btn-primary btn-sm"
                                         onclick="gotoLogin();">
                                         Register</button>
-                                <?php
+                                    <?php
                                 } else {
-                                    $register_rs = Database::search("SELECT * FROM `registration` WHERE `student_id`='".$_SESSION['u']['id']."' 
-                                        AND `event_id`='".$events_data['id']."' ");
+                                    $register_rs = Database::search("SELECT * FROM `registration` WHERE `student_id`='" . $_SESSION['u']['id'] . "' 
+                                        AND `event_id`='" . $events_data['id'] . "' ");
                                     $register_num = $register_rs->num_rows;
                                     if ($register_num == 1) {
                                     ?>
                                         <button class="btn btn-secondary btn-sm"> Registered</button>
                                     <?php
-                                    }else {
+                                    } else {
                                     ?>
-                                        <button class="btn btn-primary btn-sm" 
-                                        onclick="registerEvent(<?php echo $events_data['id']; ?>);">
-                                        Register</button>
-                                    <?php
+                                        <button class="btn btn-primary btn-sm"
+                                            onclick="registerEvent(<?php echo $events_data['id']; ?>);">
+                                            Register</button>
+                                <?php
                                     }
                                 }
                                 ?>
-                                
+
                             </div>
                         </div>
                     </article>
-                    <?php
+                <?php
                 }
                 ?>
 
-                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-            <!-- ===================== FOOTER ===================== -->
+    <!-- ===================== FOOTER ===================== -->
     <?php include "footer.php"; ?>
 
     <script>
-
         /* --- Mobile nav toggle --- */
         const navToggle = document.getElementById('navToggle');
-        const navLinks  = document.getElementById('navLinks');
+        const navLinks = document.getElementById('navLinks');
         navToggle.addEventListener('click', () => {
             const open = navLinks.classList.toggle('nav-links--open');
             navToggle.setAttribute('aria-expanded', open);
@@ -171,11 +181,13 @@ include "connection.php";
                     observer.unobserve(e.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, {
+            threshold: 0.1
+        });
         reveals.forEach(el => observer.observe(el));
-
     </script>
     <script src="js/main.js"></script>
 
 </body>
+
 </html>
