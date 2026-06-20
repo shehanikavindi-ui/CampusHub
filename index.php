@@ -11,10 +11,14 @@ include "connection.php";
     <title>CampusHub — Your Campus, Your Community</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
 
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
 
@@ -176,7 +180,7 @@ include "connection.php";
             $studentName = $_SESSION['u']['fname'];
 
             $today = date('l, j F');
-        ?>
+            ?>
 
             <!-- ===================== HERO (LOGGED IN) ===================== -->
             <br>
@@ -218,9 +222,9 @@ include "connection.php";
 
                 </div>
             </section>
-        <?php
+            <?php
         } else {
-        ?>
+            ?>
             <!-- ===================== HERO ===================== -->
             <section class="hero" id="home">
 
@@ -281,7 +285,7 @@ include "connection.php";
                     </div>
                 </div>
             </section>
-        <?php
+            <?php
         }
         ?>
 
@@ -328,7 +332,8 @@ include "connection.php";
                 <div class="section-header">
                     <span class="section-tag">Latest Updates</span>
                     <h2 class="section-title">Announcements</h2>
-                    <p class="section-subtitle">Stay informed with the latest news, updates, and notices from CampusHub.</p>
+                    <p class="section-subtitle">Stay informed with the latest news, updates, and notices from CampusHub.
+                    </p>
                 </div>
 
                 <div class="announcements-grid">
@@ -346,7 +351,7 @@ include "connection.php";
                     for ($a = 0; $a < 3; $a++) {
                         $announcements_data = $announcements_rs->fetch_assoc();
                         $categoryColor = $announcements_data['category_color'] ?? '#9CA3AF';
-                    ?>
+                        ?>
                         <article class="ann-card ann-card--event"
                             style="--ann-color: <?php echo htmlspecialchars($categoryColor); ?>;
                             --ann-color-bg: color-mix(in srgb, <?php echo htmlspecialchars($categoryColor); ?> 15%, white);">
@@ -354,7 +359,8 @@ include "connection.php";
                             <div class="ann-body">
                                 <div class="ann-meta">
                                     <span class="ann-badge ann-badge--event">
-                                        <i class="fa-solid fa-bullhorn"></i> <?php echo $announcements_data['category_name']; ?>
+                                        <i class="fa-solid fa-bullhorn"></i>
+                                        <?php echo $announcements_data['category_name']; ?>
                                     </span>
                                 </div>
                                 <h3 class="ann-title"><?php echo $announcements_data['title']; ?></h3>
@@ -362,7 +368,7 @@ include "connection.php";
                                 <p class="ann-link"><?php echo $announcements_data['institution_name']; ?></p>
                             </div>
                         </article>
-                    <?php
+                        <?php
                     }
                     ?>
 
@@ -382,7 +388,8 @@ include "connection.php";
                 <div class="section-header">
                     <span class="section-tag">Don't Miss Out</span>
                     <h2 class="section-title">Upcoming Events</h2>
-                    <p class="section-subtitle">From workshops to championships — there is something for every student.</p>
+                    <p class="section-subtitle">From workshops to championships — there is something for every student.
+                    </p>
                 </div>
 
 
@@ -400,18 +407,18 @@ include "connection.php";
 
                     for ($e = 0; $e < 3; $e++) {
                         $events_data = $events_rs->fetch_assoc();
-                    ?>
+                        ?>
 
                         <article class="event-card">
                             <div class="event-img event-img--cultural">
                                 <?php
                                 if (!$events_data['banner_img']) {
-                                ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
-                                                                                    } else {
-                                                                                        ?>
+                                    ?><i class="fa-solid fa-bullhorn event-img-icon"></i><?php
+                                } else {
+                                    ?>
                                     <img src="uploads/events/<?php echo $events_data['banner_img']; ?>" />
-                                <?php
-                                                                                    }
+                                    <?php
+                                }
                                 ?>
 
                                 <span class="event-cat-badge"><?php echo $events_data['category_name']; ?></span>
@@ -426,8 +433,10 @@ include "connection.php";
                             </div>
                             <div class="event-body">
                                 <div class="event-meta-row">
-                                    <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> - <?php echo $events_data['end_time']; ?> </span>
-                                    <span><i class="fa-solid fa-location-dot"></i> <?php echo $events_data['location']; ?></span>
+                                    <span><i class="fa-regular fa-clock"></i> <?php echo $events_data['start_time']; ?> -
+                                        <?php echo $events_data['end_time']; ?> </span>
+                                    <span><i class="fa-solid fa-location-dot"></i>
+                                        <?php echo $events_data['location']; ?></span>
                                 </div>
                                 <h3 class="event-title"><?php echo $events_data['title']; ?></h3>
                                 <p class="event-desc"><?php echo $events_data['description']; ?></p>
@@ -436,13 +445,13 @@ include "connection.php";
                                         <div class="capacity-bar">
                                             <div class="capacity-fill" style="width:45%"></div>
                                         </div>
-                                        <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?> spots</span>
+                                        <span class="capacity-label">0 / <?php echo $events_data['capacity']; ?>
+                                            spots</span>
                                     </div>
                                     <?php
                                     if (!isset($_SESSION['u'])) {
-                                    ?>
-                                        <button class="btn btn-primary btn-sm"
-                                            onclick="gotoLogin();">
+                                        ?>
+                                        <button class="btn btn-primary btn-sm" onclick="gotoLogin();">
                                             Register</button>
                                         <?php
                                     } else {
@@ -450,22 +459,22 @@ include "connection.php";
                                         AND `event_id`='" . $events_data['id'] . "' ");
                                         $register_num = $register_rs->num_rows;
                                         if ($register_num == 1) {
-                                        ?>
+                                            ?>
                                             <button class="btn btn-secondary btn-sm"> Registered</button>
-                                        <?php
+                                            <?php
                                         } else {
-                                        ?>
+                                            ?>
                                             <button class="btn btn-primary btn-sm"
                                                 onclick="registerEvent(<?php echo $events_data['id']; ?>);">
                                                 Register</button>
-                                    <?php
+                                            <?php
                                         }
                                     }
                                     ?>
                                 </div>
                             </div>
                         </article>
-                    <?php
+                        <?php
                     }
                     ?>
 
@@ -613,7 +622,8 @@ include "connection.php";
                 <div class="section-header section-header--light">
                     <span class="section-tag section-tag--light">Memories</span>
                     <h2 class="section-title section-title--light">Campus Life Gallery</h2>
-                    <p class="section-subtitle section-subtitle--light">A glimpse into the vibrant life on campus — events, faces, and moments.</p>
+                    <p class="section-subtitle section-subtitle--light">A glimpse into the vibrant life on campus —
+                        events, faces, and moments.</p>
                 </div>
 
                 <?php
@@ -631,7 +641,7 @@ include "connection.php";
                     <?php if (!empty($home_gallery)):
                         foreach ($home_gallery as $i => $item):
                             $extra = $layout_classes[$i] ?? '';
-                    ?>
+                            ?>
                             <div class="gallery-item <?= $extra ?>"
                                 style="background-image: url('<?= htmlspecialchars($item['photo']) ?>');">
                                 <div class="gallery-overlay">
@@ -652,7 +662,7 @@ include "connection.php";
                 </div>
 
                 <div class="section-footer">
-                    <a href="#" class="btn btn-outline-white">View Full Gallery</a>
+                    <a href="gallery.php" class="btn btn-outline-white">View Full Gallery</a>
                 </div>
             </div>
         </section>
@@ -660,7 +670,7 @@ include "connection.php";
 
         <?php
         if (!isset($_SESSION["u"])) {
-        ?>
+            ?>
             <!-- ===================== CTA BANNER ===================== -->
             <section class="cta-section" id="join">
                 <div class="cta-bg">
@@ -670,7 +680,8 @@ include "connection.php";
                 </div>
                 <div class="container cta-content">
                     <h2 class="cta-title">Ready to Be Part of Something Bigger?</h2>
-                    <p class="cta-subtitle">Join thousands of students who are already discovering events, connecting with clubs, and building memories through CampusHub.</p>
+                    <p class="cta-subtitle">Join thousands of students who are already discovering events, connecting with
+                        clubs, and building memories through CampusHub.</p>
                     <div class="cta-actions">
                         <a href="#" class="btn btn-white btn-lg">
                             <i class="fa-solid fa-user-plus"></i>
@@ -683,7 +694,7 @@ include "connection.php";
                     </div>
                 </div>
             </section>
-        <?php
+            <?php
         }
         ?>
 
